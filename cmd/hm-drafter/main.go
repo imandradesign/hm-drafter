@@ -14,7 +14,6 @@ const (
 	apiPlayersSlug = "player"
 	apiAllTournamentsSlug = "tournament"
 	scene = "kqpdx"
-	maxPages              = 5
 )
 
 type Tournament struct {
@@ -39,10 +38,12 @@ type APIResponse struct {
 func getPDXTournies(slug string) (portlandTournies [][]string) {
 	client := &http.Client{}
 
-	for page := 1; page <= maxPages; page++ {
+	listLen := len(portlandTournies)
+	page := 1
+
+	for listLen < 10 {
 		// Construct API URL with the slug and page number
 		api := fmt.Sprintf(apiTemplate, slug, fmt.Sprintf("&page=%d", page), "")
-		log.Printf("Tournament API: %v", api)
 		
 		req, err := http.NewRequest("GET", api, nil)
 		if err != nil {
@@ -71,6 +72,9 @@ func getPDXTournies(slug string) (portlandTournies [][]string) {
 				})
 			}
 		}
+
+		page++
+		listLen = len(portlandTournies)
 	}
 
 	return portlandTournies
