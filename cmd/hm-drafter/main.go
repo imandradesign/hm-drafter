@@ -71,6 +71,11 @@ func getPDXTournies(slug string) (portlandTournies [][]string) {
 					fmt.Sprintf("%d", tournament.ID), tournament.Name, tournament.Date,
 				})
 			}
+
+			listLen = len(portlandTournies)
+			if listLen == 10 {
+				return portlandTournies
+			}
 		}
 
 		page++
