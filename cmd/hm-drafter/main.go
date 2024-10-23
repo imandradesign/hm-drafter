@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -27,9 +28,15 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger())
 
+	// Load HTML templates
+	router.LoadHTMLFiles("index.html")
+
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
 
-	router.Run(":" + port)
+	err := router.Run(":" + port)
+	if err != nil {
+		log.Fatal("Failed to start the server:", err)
+	}
 }
