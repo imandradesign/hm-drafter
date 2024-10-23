@@ -10,11 +10,6 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
-type APIResponse struct {
-	TResults []Tournament `json:"results"`
-	FResults []FormFields `json:"results"`
-}
-
 const (
 	apiTemplate = "https://kqhivemind.com/api/tournament/%s/?format=json%s%s"
 	apiFormFieldsSlug = "player-info-field"
@@ -26,6 +21,7 @@ const (
 var (
 	selectedTournament []string
 	formFields [][]string
+	tournamentID string
 )
 
 func main() {
@@ -72,8 +68,9 @@ func main() {
 			return
 		}
 
-		// Make a new API call using the selected tournament's ID
-		tournamentID := selectedTournament[0] // // Fetch form fields for selected tournament
+		tournamentID = selectedTournament[0]
+
+		// Fetch form fields for selected tournament
 		formFields = GetFormFields(tournamentID)
 		log.Println("API data fetched.")
 
