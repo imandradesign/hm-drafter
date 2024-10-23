@@ -44,6 +44,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data
 		tournaments := GetPDXTournies()
+		log.Println("API data fetched.")
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"tournaments": tournaments,
@@ -63,6 +64,7 @@ func main() {
 
 		// Fetch tournaments and retrieve the selected one
 		tournaments := GetPDXTournies()
+		log.Println("API data fetched.")
 		if tournamentIndex >= 0 && tournamentIndex < len(tournaments) {
 			selectedTournament = tournaments[tournamentIndex]
 		} else {
@@ -73,6 +75,7 @@ func main() {
 		// Make a new API call using the selected tournament's ID
 		tournamentID := selectedTournament[0] // // Fetch form fields for selected tournament
 		formFields = GetFormFields(tournamentID)
+		log.Println("API data fetched.")
 
 		// Redirect back to the home page to show the selected tournament
 		c.Redirect(http.StatusFound, "/")

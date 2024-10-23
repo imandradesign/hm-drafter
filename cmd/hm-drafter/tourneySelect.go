@@ -16,6 +16,7 @@ type Tournament struct {
 
 // GetPDXTournies takes the API string that lists all tournaments, checks the `results` list for entries where the `scene_name` is `kqpdx` and returns those events with their ID, name, and date in nested lists
 func GetPDXTournies() (portlandTournies [][]string) {
+	log.Println("Fetching tournament data...")
 	client := &http.Client{}
 
 	listLen := len(portlandTournies)
