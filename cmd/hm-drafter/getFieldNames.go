@@ -55,5 +55,6 @@ func GetFormFields(tournamentId string) (fields [][]string) {
 		})
 	}
 
+	log.Println("API data fetched.")
 	return fields
 }
