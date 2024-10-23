@@ -33,11 +33,11 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger())
 
-	// Load HTML templates with correct relative path
-	router.LoadHTMLFiles("cmd/hm-drafter/templates/*.html")
+	// Load HTML templates
+	router.LoadHTMLFiles("templates/*.html")
 
 	router.GET("/", func(c *gin.Context) {
-		// Fetch tournament data using GetPDXTournies
+		// Fetch tournament data
 		tournaments := GetPDXTournies(apiAllTournamentsSlug)
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
