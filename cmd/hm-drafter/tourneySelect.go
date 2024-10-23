@@ -14,20 +14,16 @@ type Tournament struct {
 	SceneName string `json:"scene_name"`
 }
 
-type APIResponse struct {
-	Results []Tournament `json:"results"`
-}
-
 // GetPDXTournies takes the API string that lists all tournaments, checks the `results` list for entries where the `scene_name` is `kqpdx` and returns those events with their ID, name, and date in nested lists
-func GetPDXTournies(slug string) (portlandTournies [][]string) {
+func GetPDXTournies() (portlandTournies [][]string) {
 	client := &http.Client{}
 
 	listLen := len(portlandTournies)
 	page := 1
 
 	for listLen < 10 {
-		// Construct API URL with the slug and page number
-		api := fmt.Sprintf(apiTemplate, slug, fmt.Sprintf("&page=%d", page), "")
+		// Construct API URL with the tournament slug and page number
+		api := fmt.Sprintf(apiTemplate, "tournament", fmt.Sprintf("&page=%d", page), "")
 		
 		req, err := http.NewRequest("GET", api, nil)
 		if err != nil {
@@ -49,7 +45,7 @@ func GetPDXTournies(slug string) (portlandTournies [][]string) {
 		}
 
 		// Loop through each item in `results` and filter by `scene_name == "kqpdx"`
-		for _, tournament := range apiResponse.Results {
+		for _, tournament := range apiResponse.TResults {
 			if tournament.SceneName == scene {
 				portlandTournies = append(portlandTournies, []string{
 					fmt.Sprintf("%d", tournament.ID), tournament.Name, tournament.Date,

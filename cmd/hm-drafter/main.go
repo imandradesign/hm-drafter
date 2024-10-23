@@ -10,17 +10,22 @@ import (
 	_ "github.com/heroku/x/hmetrics/onload"
 )
 
+type APIResponse struct {
+	TResults []Tournament `json:"results"`
+	FResults []FormFields `json:"results"`
+}
+
 const (
 	apiTemplate = "https://kqhivemind.com/api/tournament/%s/?format=json%s%s"
 	apiFormFieldsSlug = "player-info-field"
 	apiTeamsSlug = "team"
 	apiPlayersSlug = "player"
-	apiAllTournamentsSlug = "tournament"
 	scene = "kqpdx"
 )
 
 var (
 	selectedTournament []string
+	formFields [][]string
 )
 
 func main() {
@@ -38,7 +43,7 @@ func main() {
 
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data
-		tournaments := GetPDXTournies(apiAllTournamentsSlug)
+		tournaments := GetPDXTournies()
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"tournaments": tournaments,
@@ -57,13 +62,17 @@ func main() {
 		}
 
 		// Fetch tournaments and retrieve the selected one
-		tournaments := GetPDXTournies(apiAllTournamentsSlug)
+		tournaments := GetPDXTournies()
 		if tournamentIndex >= 0 && tournamentIndex < len(tournaments) {
 			selectedTournament = tournaments[tournamentIndex]
 		} else {
 			c.String(http.StatusBadRequest, "Tournament not found")
 			return
 		}
+
+		// Make a new API call using the selected tournament's ID
+		tournamentID := selectedTournament[0] // // Fetch form fields for selected tournament
+		formFields = GetFormFields(tournamentID)
 
 		// Redirect back to the home page to show the selected tournament
 		c.Redirect(http.StatusFound, "/")
