@@ -1,9 +1,12 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
 )
 
 const (
@@ -15,20 +18,21 @@ const (
 	scene = "kqpdx"
 )
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	// Fetch Portland tournaments using the GetPDXTournies function
-	portlandTournies := GetPDXTournies(apiAllTournamentsSlug)
-
-	// Parse and execute the HTML template
-	tmpl := template.Must(template.ParseFiles("../../index.html"))
-	tmpl.Execute(w, portlandTournies)
-}
-
 func main() {
-	// Set up the home route and handler
-	http.HandleFunc("/", homeHandler)
+	port := os.Getenv("PORT")
 
-	// Start the web server
-	log.Println("Server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
+	router := gin.New()
+	router.Use(gin.Logger())
+	// router.LoadHTMLGlob("templates/*.tmpl.html")
+	// router.Static("/static", "static")
+
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
+	router.Run(":" + port)
 }
