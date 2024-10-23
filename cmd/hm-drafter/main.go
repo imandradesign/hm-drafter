@@ -20,7 +20,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	portlandTournies := GetPDXTournies(apiAllTournamentsSlug)
 
 	// Parse and execute the HTML template
-	tmpl := template.Must(template.ParseFiles("templates/index.html"))
+	tmpl := template.Must(template.ParseFiles("../../index.html"))
 	tmpl.Execute(w, portlandTournies)
 }
 
