@@ -70,7 +70,6 @@ func main() {
 
 		// Fetch form fields for selected tournament
 		formFields = GetFormFields(tournamentID)
-		log.Printf("Form Fields:\n%v", formFields)
 
 		// Redirect back to the home page to show the selected tournament
 		c.Redirect(http.StatusFound, "/")

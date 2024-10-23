@@ -26,7 +26,6 @@ func GetFormFields(tournamentId string) (fields [][]string) {
 	}
 
 	api := fmt.Sprintf(apiTemplate, "player-info-field", fmt.Sprintf("&tournament_id=%v", tournamentId), "")
-	log.Printf("Form Field API call: %v", api)
 		
 	req, err := http.NewRequest("GET", api, nil)
 	if err != nil {

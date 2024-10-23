@@ -32,7 +32,6 @@ func GetPDXTournies() (portlandTournies [][]string) {
 	for listLen < 10 {
 		// Construct API URL with the tournament slug and page number
 		api := fmt.Sprintf(apiTemplate, "tournament", fmt.Sprintf("&page=%d", page), "")
-		log.Printf("Tournament API call: %v", api)
 		
 		req, err := http.NewRequest("GET", api, nil)
 		if err != nil {
@@ -53,11 +52,8 @@ func GetPDXTournies() (portlandTournies [][]string) {
 			log.Fatal(err)
 		}
 
-		log.Printf("API RESPONSE: \n%v", apiResponse)
-
 		// Loop through each item in `results` and filter by `scene_name == "kqpdx"`
 		for _, tournament := range apiResponse.Results {
-			log.Printf("Looping through tournament list. Page: %v", page)
 			if tournament.SceneName == scene {
 				portlandTournies = append(portlandTournies, []string{
 					fmt.Sprintf("%d", tournament.ID), tournament.Name, tournament.Date,
