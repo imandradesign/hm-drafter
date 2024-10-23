@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament List</title>
+</head>
+
+<body>
+    <h1>List of Portland Tournaments</h1>
+    <ul>
+        {{range .}}
+        <li>ID: {{index . 0}}, Name: {{index . 1}}, Date: {{index . 2}}</li>
+        {{else}}
+        <li>No tournaments found.</li>
+        {{end}}
+    </ul>
+</body>
+
+</html>
