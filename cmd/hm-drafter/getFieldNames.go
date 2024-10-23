@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 type FormFields struct {
@@ -16,7 +17,9 @@ type FormFields struct {
 // GetFormFields takes the API string that lists all tourney form fields, checks the `results` list entries and returns the form fields with their randomly assigned name
 func GetFormFields(tournamentId string) (fields [][]string) {
 	log.Println("Fetching form field data...")
-	client := &http.Client{}
+	client := &http.Client{
+    	Timeout: 10 * time.Second,
+	}
 
 	api := fmt.Sprintf(apiTemplate, "player-info-field", fmt.Sprintf("&tournament_id=%v", tournamentId), "")
 		
