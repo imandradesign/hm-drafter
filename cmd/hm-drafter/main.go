@@ -32,7 +32,12 @@ func main() {
 	router.LoadHTMLFiles("index.html")
 
 	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
+		// Fetch tournament data using GetPDXTournies
+		tournaments := GetPDXTournies(apiAllTournamentsSlug)
+
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"tournaments": tournaments,
+		})
 	})
 
 	err := router.Run(":" + port)
