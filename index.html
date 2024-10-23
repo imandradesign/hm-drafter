@@ -4,18 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tournament List</title>
+    <title>Portland Tournaments</title>
 </head>
 
 <body>
-    <h1>List of Portland Tournaments</h1>
-    <ul>
-        {{range .}}
-        <li>ID: {{index . 0}}, Name: {{index . 1}}, Date: {{index . 2}}</li>
-        {{else}}
-        <li>No tournaments found.</li>
-        {{end}}
-    </ul>
+    <h1>Select a Portland Tournament</h1>
+
+    <form method="POST" action="/confirm">
+        <label for="tournament">Choose a tournament:</label>
+        <select id="tournament" name="tournament">
+            {{range $index, $tournament := .tournaments}}
+            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index
+                $tournament 2}}</option>
+            {{else}}
+            <option>No tournaments available</option>
+            {{end}}
+        </select>
+        <br><br>
+        <button type="submit">Confirm</button>
+    </form>
+
+    {{if .selectedTournament}}
+    <h2>Selected Tournament:</h2>
+    <p>ID: {{index .selectedTournament 0}}</p>
+    <p>Name: {{index .selectedTournament 1}}</p>
+    <p>Date: {{index .selectedTournament 2}}</p>
+    {{end}}
 </body>
 
 </html>
