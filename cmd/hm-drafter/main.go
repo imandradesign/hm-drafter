@@ -34,7 +34,7 @@ func main() {
 	router.Use(gin.Logger())
 
 	// Load HTML templates
-	router.LoadHTMLFiles("index.html")
+	router.LoadHTMLFiles("templates/*")
 
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data using GetPDXTournies
