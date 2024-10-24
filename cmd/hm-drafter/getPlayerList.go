@@ -38,12 +38,12 @@ func ParsePlayers(data map[string]interface{}) Players {
 			case string:
 				player.FormFields[field[1]] = v // field[1] is the slug like "discord"
 			case []interface{}:
-				// Convert array to a string representation
+				// Convert array to a string representation (comma-separated)
 				var strValues []string
 				for _, item := range v {
 					strValues = append(strValues, fmt.Sprintf("%v", item))
 				}
-				player.FormFields[field[1]] = fmt.Sprintf("[%s]", stringArrayToCSV(strValues))
+				player.FormFields[field[1]] = strings.Join(strValues, ", ") // Join without brackets
 			default:
 				// Handle other types as needed
 				player.FormFields[field[1]] = fmt.Sprintf("%v", value)
