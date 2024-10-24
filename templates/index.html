@@ -4,27 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Cards</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Portland Tournaments</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body>
+    <h1>Select a Portland Tournament</h1>
 
-    <div class="players-container">
+    <form method="POST" action="/confirm">
+        <label for="tournament">Choose a tournament:</label>
+        <select id="tournament" name="tournament">
+            {{range $index, $tournament := .tournaments}}
+            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index
+                $tournament 2}}</option>
+            {{else}}
+            <option>No tournaments available</option>
+            {{end}}
+        </select>
+        <br><br>
+        <button type="submit">Confirm</button>
+    </form>
+
+    {{if .selectedTournament}}
+    <h2>Selected Tournament:</h2>
+    <p>ID: {{index .selectedTournament 0}}</p>
+    <p>Name: {{index .selectedTournament 1}}</p>
+    <p>Date: {{index .selectedTournament 2}}</p>
+
+    <h2>Players List</h2>
+    <div class="players-grid">
         {{range $index, $player := .players}}
         <div class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
             <div class="radio-btn">
                 <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer">
             </div>
-            <div class="player-info">
-                <h3>{{ $player.Name }}</h3>
-                <p>Pronouns: {{ $player.Pronouns }}</p>
-                <p>Roles: {{ $player.FormFields.roles }}</p>
-                <p>Skill Level: {{ $player.FormFields.skill }}</p>
-            </div>
+            <h3>{{.Name}}</h3>
+            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+            <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+            <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
         </div>
         {{end}}
     </div>
+    {{end}}
 
     <script>
         function toggleRadio(radioId) {
