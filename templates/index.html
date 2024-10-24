@@ -15,8 +15,7 @@
         <label for="tournament">Choose a tournament:</label>
         <select id="tournament" name="tournament">
             {{range $index, $tournament := .tournaments}}
-            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index
-                $tournament 2}}</option>
+            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
             {{else}}
             <option>No tournaments available</option>
             {{end}}
@@ -34,7 +33,8 @@
     <h2>Players List</h2>
     <div class="players-grid">
         {{range $index, $player := .players}}
-        <div class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
+        <!-- Wrapping each card and radio button in a label so both are clickable -->
+        <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
             <div class="radio-btn">
                 <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer">
             </div>
@@ -42,7 +42,7 @@
             <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
             <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
             <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
-        </div>
+        </label>
         {{end}}
     </div>
     {{end}}
@@ -50,10 +50,9 @@
     <script>
         function toggleRadio(radioId) {
             var radio = document.getElementById(radioId);
-            radio.checked = !radio.checked;
+            radio.checked = true; // Ensure the radio is selected when clicked
         }
     </script>
-
 </body>
 
 </html>

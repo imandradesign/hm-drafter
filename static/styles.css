@@ -1,38 +1,33 @@
-/* General container for players */
-.players-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+body {
+    font-family: Arial, sans-serif;
 }
 
-/* Each player card */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Two equal columns */
+    gap: 20px;
+    margin-top: 20px;
+}
+
 .player-card {
-    position: relative;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 16px;
-    width: 200px;
+    position: relative;
     cursor: pointer;
+    background-color: #f9f9f9;
     transition: background-color 0.3s ease;
 }
 
 .player-card:hover {
-    background-color: #f0f0f0;
+    background-color: #e0f7fa;
 }
 
-/* Player info */
-.player-info h3 {
-    margin: 0;
-    padding: 0;
-    font-size: 18px;
+.player-card h3 {
+    margin-top: 0;
 }
 
-.player-info p {
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-/* Radio button styling */
 .radio-btn {
     position: absolute;
     top: 10px;
@@ -40,6 +35,5 @@
 }
 
 input[type="radio"] {
-    transform: scale(1.5);
     cursor: pointer;
 }
