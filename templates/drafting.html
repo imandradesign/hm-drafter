@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portland Mixer Drafting</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    {{if .selectedTournament}}
+    <h2>Selected Tournament:</h2>
+    <p>Name: {{index .selectedTournament 1}}</p>
+    <p>Date: {{index .selectedTournament 2}}</p>
+
+    <h2>Players List</h2>
+    <div class="players-grid">
+        {{range $index, $player := .players}}
+        <!-- Wrapping each card and radio button in a label so both are clickable -->
+        <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
+            <div class="radio-btn">
+                <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer">
+            </div>
+            <h3>{{.Name}}</h3>
+            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+            <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+            <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+        </label>
+        {{end}}
+    </div>
+    {{end}}
+
+    <script>
+        function toggleRadio(radioId) {
+            var radio = document.getElementById(radioId);
+            radio.checked = true; // Ensure the radio is selected when clicked
+        }
+    </script>
+</body>
+
+</html>

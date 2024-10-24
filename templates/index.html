@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portland Tournaments</title>
+    <title>Portland Mixer Drafting - Tournament Select</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 
@@ -29,28 +29,29 @@
     <p>ID: {{index .selectedTournament 0}}</p>
     <p>Name: {{index .selectedTournament 1}}</p>
     <p>Date: {{index .selectedTournament 2}}</p>
+    <p>Player Count: {{.playerCount}}</p>
+    {{end}}
 
     <h2>Players List</h2>
     <div class="players-grid">
         {{range $index, $player := .players}}
-        <!-- Wrapping each card and radio button in a label so both are clickable -->
-        <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
+        <!-- Wrapping each card and checkbox in a label so both are clickable -->
+        <label class="player-card" onclick="toggleCheckbox('playerCheckbox{{$index}}')">
             <div class="radio-btn">
-                <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer">
+                <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}">
             </div>
             <h3>{{.Name}}</h3>
-            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+            <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p><p><strong>Pronouns:</strong> {{.Pronouns}}</p><p><strong>Captain?:</strong> {{index .FormFields "captain"}}</p><p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
             <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
             <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
         </label>
         {{end}}
     </div>
-    {{end}}
 
     <script>
-        function toggleRadio(radioId) {
-            var radio = document.getElementById(radioId);
-            radio.checked = true; // Ensure the radio is selected when clicked
+        function toggleCheckbox(checkboxId) {
+            var checkbox = document.getElementById(checkboxId);
+            checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
         }
     </script>
 </body>

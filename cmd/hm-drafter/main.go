@@ -11,18 +11,19 @@ import (
 )
 
 const (
-	apiTemplate = "https://kqhivemind.com/api/tournament/%s/?format=json%s%s"
+	apiTemplate      = "https://kqhivemind.com/api/tournament/%s/?format=json%s%s"
 	apiFormFieldsSlug = "player-info-field"
-	apiTeamsSlug = "team"
-	apiPlayersSlug = "player"
-	scene = "kqpdx"
+	apiTeamsSlug      = "team"
+	apiPlayersSlug    = "player"
+	scene            = "kqpdx"
 )
 
 var (
 	selectedTournament []string
-	formFields [][]string
-	tournamentID string
-	players []Players
+	formFields         [][]string
+	tournamentID       string
+	players            []Players
+	playerCount        int
 )
 
 func main() {
@@ -36,18 +37,28 @@ func main() {
 	router.Use(gin.Logger())
 
 	// Load HTML templates
-	router.LoadHTMLFiles("templates/index.html")
+	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html")
 
 	router.Static("/static", "./static")
 
+	// Home page route
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data
 		tournaments := GetPDXTournies()
 
 		c.HTML(http.StatusOK, "index.html", gin.H{
-			"tournaments": tournaments,
+			"tournaments":        tournaments,
 			"selectedTournament": selectedTournament,
+			"playerCount":        playerCount,
 			"players":            players,
+		})
+	})
+
+	// Drafting page route (accessible at /drafting)
+	router.GET("/drafting", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "drafting.html", gin.H{
+			"playerCount": playerCount,
+			"players":     players,
 		})
 	})
 
@@ -77,9 +88,11 @@ func main() {
 
 		// Fetch player data
 		players = GetPlayersData(tournamentID)
+		playerCount = len(players)
+		log.Printf("# of players: %v", playerCount)
 
-		// Redirect back to the home page to show the selected tournament
-		c.Redirect(http.StatusFound, "/")
+		// Redirect to the drafting page after tournament selection
+		c.Redirect(http.StatusFound, "/drafting")
 	})
 
 	err := router.Run(":" + port)

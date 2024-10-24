@@ -60,6 +60,7 @@ func safeString(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
+// GetPlayersData uses the tournament ID to retrieve player and form field data from that specific event. Returns player count as well.
 func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("Fetching player data...")
 	client := &http.Client{
