@@ -39,32 +39,37 @@
 
     {{if .players}}
     <h2>Select Your Captains</h2>
-    <div class="players-grid">
-        {{range $index, $player := .players}}
-        <!-- Wrapping each card and checkbox in a label so both are clickable -->
-        <label class="player-card" for="playerCheckbox{{$index}}">
-            <div class="checkbox-btn">
-                <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}" onclick="event.stopPropagation();">
-            </div>
-            <h2>{{.Name}}</h2>
-            <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index .FormFields "captain") "If needed" )}}captain-text{{end}}">{{index .FormFields "captain"}}</span></strong></h3>
-            <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
-            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
-            <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
-            <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
-            <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
-        </label>
-        {{end}}
-    </div>
-    <center><button type="submit" class="confirm-btn">Confirm Captains</button></center>
+    <form id="captainsForm" method="POST" action="/confirm-captains">
+        <div class="players-grid">
+            {{range $index, $player := .players}}
+            <label class="player-card" for="playerCheckbox{{$index}}">
+                <div class="checkbox-btn">
+                    <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}"
+                        onclick="event.stopPropagation();">
+                </div>
+                <h2>{{.Name}}</h2>
+                <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields " captain") "Yes" ) (eq (index
+                            .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
+                            "captain"}}</span></strong></h3>
+                <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
+                <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+                <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
+                <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+                <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+            </label>
+            {{end}}
+        </div>
+        <br><br>
+        <center><button type="submit" class="confirm-btn">Confirm Captains</button></center>
+    </form>
     {{end}}
 
     <script>
         function toggleCheckbox(checkboxId) {
-                var checkbox = document.getElementById(checkboxId);
-                checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
-                checkbox.focus(); // Ensure the checkbox receives focus after clicking the card
-            }
+            var checkbox = document.getElementById(checkboxId);
+            checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
+            checkbox.focus(); // Ensure the checkbox receives focus after clicking the card
+        }
     </script>
 </body>
 

@@ -9,10 +9,21 @@
 </head>
 
 <body>
-    {{if .selectedTournament}}
-    <h2>Selected Tournament:</h2>
-    <p>Name: {{index .selectedTournament 1}}</p>
-    <p>Date: {{index .selectedTournament 2}}</p>
+    <div class="header-container"></div>
+        {{if .selectedTournament}}
+        <div class="selected-tournament-box">
+            <h2>Selected Tournament</h2>
+            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
+            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+            <p>
+                <center>
+                    <strong>Captain Count: </strong>{{.captainCount}}
+                    <strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}
+                </center>
+            </p>
+        </div>
+        {{end}}
+    </div>
 
     <h2>Players List</h2>
     <div class="players-grid">

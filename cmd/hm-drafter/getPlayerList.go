@@ -118,3 +118,22 @@ func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("API data fetched.")
 	return players
 }
+
+// RemoveCaptainsFromPlayers returns a new player list without captains
+func RemoveCaptainsFromPlayers(players []Players, captains []string) (draftPlayers []Players) {
+	captainSet := make(map[string]bool)
+	
+	// Create a set of captain names for quick lookups
+	for _, captain := range captains {
+		captainSet[captain] = true
+	}
+
+	// Loop through players and only append those who are not captains
+	for _, player := range players {
+		if !captainSet[player.Name] {
+			draftPlayers = append(draftPlayers, player)
+		}
+	}
+
+	return draftPlayers
+}

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
@@ -19,11 +21,15 @@ const (
 )
 
 var (
-	selectedTournament []string
-	formFields         [][]string
-	tournamentID       string
-	players            []Players
-	playerCount        int
+	selectedTournament  []string
+	formFields          [][]string
+	tournamentID        string
+	players             []Players
+	playerCount         int
+	captains            []string
+	captainCount        int
+	draftPlayers        []Players
+	remaininPlayerCount int
 )
 
 func main() {
@@ -54,15 +60,7 @@ func main() {
 		})
 	})
 
-	// Drafting page route (accessible at /drafting)
-	router.GET("/drafting", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "drafting.html", gin.H{
-			"playerCount": playerCount,
-			"players":     players,
-		})
-	})
-
-	// Handle the form submission and store the selected tournament
+	// Handle the form submission for tournament selection
 	router.POST("/confirm", func(c *gin.Context) {
 		// Get the selected tournament ID from the form
 		tournamentIndexStr := c.PostForm("tournament")
@@ -93,6 +91,40 @@ func main() {
 
 		// Stay on homepage when confirming tournament selection
 		c.Redirect(http.StatusFound, "/")
+	})
+
+	// Handle the captain confirmation POST request
+	router.POST("/confirm-captains", func(c *gin.Context) {
+		// Get the selected captains from the form
+		captains = c.PostFormArray("selectedPlayers")
+		captainCount = len(captains)
+
+		// If no captains were selected, return an error message
+		if len(captains) == 0 {
+			c.String(http.StatusBadRequest, "No captains selected. Please select at least one captain.")
+			return
+		}
+
+		// Build confirmation message with the list of captains
+		confirmationMessage := fmt.Sprintf("Are you sure? Your captains are:\n%s", strings.Join(captains, "\n"))
+
+		draftPlayers = RemoveCaptainsFromPlayers(players, captains)
+		remaininPlayerCount = len(draftPlayers)
+
+		// Show confirmation dialog
+		c.HTML(http.StatusOK, "confirm.html", gin.H{
+			"confirmationMessage": confirmationMessage,
+			"redirectURL":         "/drafting", // Redirect to the drafting page
+		})
+	})
+
+	// Drafting page route (accessible at /drafting)
+	router.GET("/drafting", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "drafting.html", gin.H{
+			"captainCount": captainCount,
+			"remaininPlayerCount": remaininPlayerCount,
+			"players":     draftPlayers,
+		})
 	})
 
 	err := router.Run(":" + port)
