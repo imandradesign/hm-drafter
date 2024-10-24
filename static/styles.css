@@ -9,7 +9,7 @@ body {
     align-items: flex-start;
 }
 
-.tournament-select {
+.tournament-select,.draft-order {
     flex-grow: 1;
 }
 
