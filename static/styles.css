@@ -21,6 +21,10 @@ body {
     width: 250px;
 }
 
+.selected-tournament-box h2 {
+    align-items: center;
+}
+
 .players-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

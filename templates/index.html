@@ -28,11 +28,11 @@
 
         {{if .selectedTournament}}
         <div class="selected-tournament-box">
-            <h2>Selected Tournament:</h2>
-            <p>ID: {{index .selectedTournament 0}}</p>
-            <p>Name: {{index .selectedTournament 1}}</p>
-            <p>Date: {{index .selectedTournament 2}}</p>
-            <p>Player Count: {{.playerCount}}</p>
+            <h2>Selected Tournament</h2>
+            <p><strong>ID: </strong>{{index .selectedTournament 0}}</p>
+            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
+            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+            <p><strong>Player Count: </strong>{{.playerCount}}</p>
             {{end}}
         </div>
     </div>
@@ -46,8 +46,8 @@
             <div class="checkbox-btn">
                 <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}">
             </div>
-            <h3>{{.Name}}</h3>
-            <p><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index .FormFields "captain") "If needed" )}}captain-text{{end}}">{{index .FormFields "captain"}}</span></strong></p>
+            <h2>{{.Name}}</h2>
+            <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index .FormFields "captain") "If needed" )}}captain-text{{end}}">{{index .FormFields "captain"}}</span></strong></h3>
             <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
             <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
             <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
