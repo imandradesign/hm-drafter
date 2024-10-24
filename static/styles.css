@@ -34,6 +34,10 @@ body {
     right: 20px;
 }
 
+.captain-text {
+    color:darkred;
+}
+
 input[type="radio"] {
     cursor: pointer;
     height: 40px;

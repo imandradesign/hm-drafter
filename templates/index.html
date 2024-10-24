@@ -32,8 +32,8 @@
     <p>Player Count: {{.playerCount}}</p>
     {{end}}
 
-    <h2>Players List</h2>
     <div class="players-grid">
+        <h2>Select Your Captains</h2>
         {{range $index, $player := .players}}
         <!-- Wrapping each card and checkbox in a label so both are clickable -->
         <label class="player-card" onclick="toggleCheckbox('playerCheckbox{{$index}}')">
@@ -41,7 +41,10 @@
                 <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}">
             </div>
             <h3>{{.Name}}</h3>
-            <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p><p><strong>Pronouns:</strong> {{.Pronouns}}</p><p><strong>Captain?:</strong> {{index .FormFields "captain"}}</p><p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
+            <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
+            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+            <p><strong>Captain?:</strong><span class="{{if or (eq (index .FormFields " captain") "Yes" ) (eq (index .FormFields "captain" ) "If needed")}}captain-text{{end}}">{{index .FormFields "captain"}}</span></p>
+            <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
             <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
             <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
         </label>

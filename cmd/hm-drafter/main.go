@@ -91,8 +91,8 @@ func main() {
 		playerCount = len(players)
 		log.Printf("# of players: %v", playerCount)
 
-		// Redirect to the drafting page after tournament selection
-		c.Redirect(http.StatusFound, "/drafting")
+		// Stay on homepage when confirming tournament selection
+		c.Redirect(http.StatusFound, "/")
 	})
 
 	err := router.Run(":" + port)
