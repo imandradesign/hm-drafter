@@ -1,4 +1,4 @@
-package hmdrafter
+package main
 
 import (
 	"log"
