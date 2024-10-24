@@ -51,14 +51,19 @@ body {
     margin-top: 0;
 }
 
+.captain-text {
+    color: darkred;
+}
+
+.confirm-btn {
+    background-color: #e0f7fa;
+    font-size: 35px;
+}
+
 .radio-btn,.checkbox-btn {
     position: absolute;
     top: 20px;
     right: 20px;
-}
-
-.captain-text {
-    color:darkred;
 }
 
 input[type="radio"],input[type="checkbox"] {

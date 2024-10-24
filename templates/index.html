@@ -22,17 +22,17 @@
                     {{end}}
                 </select>
                 <br><br>
-                <button type="submit">Confirm</button>
+                <button type="submit" class="confirm-btn">Confirm</button>
             </form>
         </div>
 
         {{if .selectedTournament}}
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
+            <p><center><strong>Player Count: </strong>{{.playerCount}}</center></p>
             <p><strong>ID: </strong>{{index .selectedTournament 0}}</p>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
             <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
-            <p><strong>Player Count: </strong>{{.playerCount}}</p>
             {{end}}
         </div>
     </div>
@@ -54,6 +54,7 @@
             <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
             <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
         </label>
+        <button type="submit" class="confirm-btn">Confirm Captains</button>
         {{end}}
     </div>
     {{end}}
