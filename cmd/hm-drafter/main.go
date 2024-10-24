@@ -141,6 +141,7 @@ func main() {
 
 		// Re-render the drafting page with the updated current captain
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
+			"selectedTournament": selectedTournament,
 			"captainCount":         captainCount,
 			"remaininPlayerCount":  remaininPlayerCount,
 			"draftOrder":           draftOrder,
