@@ -9,8 +9,16 @@
 </head>
 
 <body>
+    <div class="draft-order">
+        <h2>Snake Draft Order</h2>
+        <0l>
+            {{range .draftOrder}}
+            <li>{{.Name}}</li>
+            {{end}}
+        </ol>
+    </div>
+
     <div class="header-container"></div>
-        {{if .selectedTournament}}
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
@@ -22,7 +30,10 @@
                 </center>
             </p>
         </div>
-        {{end}}
+    </div>
+
+    <div id="curr-captain">
+        <h1>{{index .draftOrder 0 "Name"}}</h1>
     </div>
 
     <h2>Players List</h2>

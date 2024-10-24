@@ -111,9 +111,12 @@ func main() {
 
 	// Drafting page route (accessible at /drafting)
 	router.GET("/drafting", func(c *gin.Context) {
+		draftOrder := CaptainDraftOrder(captains)
+
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"captainCount": captainCount,
 			"remaininPlayerCount": remaininPlayerCount,
+			"draftOrder": draftOrder,
 			"players":     draftPlayers,
 		})
 	})
