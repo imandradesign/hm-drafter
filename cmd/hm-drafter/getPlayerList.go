@@ -98,5 +98,8 @@ func GetPlayersData(tournamentId string) (players []Players) {
 		}
 	}
 
+	log.Printf("PLAYERS: \n%v", players)
+
+	log.Println("API data fetched.")
 	return players
 }

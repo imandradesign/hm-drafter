@@ -22,6 +22,7 @@ var (
 	selectedTournament []string
 	formFields [][]string
 	tournamentID string
+	players []Players
 )
 
 func main() {
@@ -70,6 +71,9 @@ func main() {
 
 		// Fetch form fields for selected tournament
 		formFields = GetFormFields(tournamentID)
+
+		// Fetch player data
+		players = GetPlayersData(tournamentID)
 
 		// Redirect back to the home page to show the selected tournament
 		c.Redirect(http.StatusFound, "/")
