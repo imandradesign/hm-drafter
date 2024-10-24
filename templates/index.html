@@ -60,9 +60,10 @@
 
     <script>
         function toggleCheckbox(checkboxId) {
-            var checkbox = document.getElementById(checkboxId);
-            checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
-        }
+                var checkbox = document.getElementById(checkboxId);
+                checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
+                checkbox.focus(); // Ensure the checkbox receives focus after clicking the card
+            }
     </script>
 </body>
 
