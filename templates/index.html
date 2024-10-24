@@ -42,7 +42,7 @@
     <div class="players-grid">
         {{range $index, $player := .players}}
         <!-- Wrapping each card and checkbox in a label so both are clickable -->
-        <label class="player-card" onclick="toggleCheckbox('playerCheckbox{{$index}}')">
+        <label class="player-card" for="playerCheckbox{{$index}}">
             <div class="checkbox-btn">
                 <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}" onclick="event.stopPropagation();">
             </div>
