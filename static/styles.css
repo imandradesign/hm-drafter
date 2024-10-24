@@ -28,7 +28,7 @@ body {
     margin-top: 0;
 }
 
-.radio-btn {
+.radio-btn,.checkbox-btn {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -38,7 +38,7 @@ body {
     color:darkred;
 }
 
-input[type="radio"] {
+input[type="radio"],input[type="checkbox"] {
     cursor: pointer;
     height: 40px;
     width: 40px;

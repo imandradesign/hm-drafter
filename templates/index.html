@@ -37,7 +37,7 @@
         {{range $index, $player := .players}}
         <!-- Wrapping each card and checkbox in a label so both are clickable -->
         <label class="player-card" onclick="toggleCheckbox('playerCheckbox{{$index}}')">
-            <div class="radio-btn">
+            <div class="checkbox-btn">
                 <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}">
             </div>
             <h3>{{.Name}}</h3>
