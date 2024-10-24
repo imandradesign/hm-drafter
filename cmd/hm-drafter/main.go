@@ -1,12 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
@@ -105,16 +103,11 @@ func main() {
 			return
 		}
 
-		// Build confirmation message with the list of captains
-		confirmationMessage := fmt.Sprintf("Are you sure? Your captains are:\n%s", strings.Join(captains, "\n"))
-
 		draftPlayers = RemoveCaptainsFromPlayers(players, captains)
 		remaininPlayerCount = len(draftPlayers)
 
-		// Show confirmation dialog
 		c.HTML(http.StatusOK, "confirm.html", gin.H{
-			"confirmationMessage": confirmationMessage,
-			"redirectURL":         "/drafting", // Redirect to the drafting page
+			"redirectURL": "/drafting",
 		})
 	})
 
