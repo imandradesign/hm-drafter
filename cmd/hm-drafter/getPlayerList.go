@@ -10,10 +10,10 @@ import (
 )
 
 type Players struct {
-	Name        string    `json:"name"`
-	Scene        string    `json:"scene"`
-	Pronouns        string    `json:"pronouns"`
-	FormFields  map[string]string
+	Name       string    `json:"name"`
+	Scene      string    `json:"scene"`
+	Pronouns   string    `json:"pronouns"`
+	FormFields map[string]string
 }
 
 type PlayersApiResponse struct {
@@ -21,11 +21,11 @@ type PlayersApiResponse struct {
 }
 
 func ParsePlayers(data map[string]interface{}) Players {
-	// Extract static fields like name, scene, pronouns
+	// Extract static fields like name, scene, pronouns, checking if they are nil first
 	player := Players{
-		Name:     data["name"].(string),
-		Scene:    data["scene"].(string),
-		Pronouns: data["pronouns"].(string),
+		Name:     safeString(data["name"]),
+		Scene:    safeString(data["scene"]),
+		Pronouns: safeString(data["pronouns"]),
 	}
 
 	// Prepare dynamic form fields
@@ -45,7 +45,6 @@ func ParsePlayers(data map[string]interface{}) Players {
 				}
 				player.FormFields[field[1]] = strings.Join(strValues, ", ") // Join without brackets
 			default:
-				// Handle other types as needed
 				player.FormFields[field[1]] = fmt.Sprintf("%v", value)
 			}
 		}
@@ -53,20 +52,24 @@ func ParsePlayers(data map[string]interface{}) Players {
 	return player
 }
 
-// Helper function to convert []string to CSV format
-func stringArrayToCSV(array []string) string {
-	return strings.Join(array, ", ")
+// Helper function to safely convert a field to a string, handling nil cases
+func safeString(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	return fmt.Sprintf("%v", value)
 }
-
 
 func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("Fetching player data...")
 	client := &http.Client{
-    	Timeout: 10 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 
 	page := 1
 	for {
+		log.Printf("Fetching page: %d", page)
+
 		// Build the API URL for the current page
 		api := fmt.Sprintf(apiTemplate, "player", fmt.Sprintf("&tournament_id=%v", tournamentId), fmt.Sprintf("&page=%d", page))
 
@@ -79,48 +82,38 @@ func GetPlayersData(tournamentId string) (players []Players) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		defer resp.Body.Close()
 
-		// Close the response body after reading
-		func() {
-			defer resp.Body.Close()
+		// Parse the response into a generic map
+		var rawResponse map[string]interface{}
+		err = json.NewDecoder(resp.Body).Decode(&rawResponse)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-			// Parse the response into a generic map
-			var rawResponse map[string]interface{}
-			err = json.NewDecoder(resp.Body).Decode(&rawResponse)
-			if err != nil {
-				log.Fatal(err)
-			}
+		// Check if the results array is empty
+		results, ok := rawResponse["results"].([]interface{})
+		if !ok || len(results) == 0 {
+			log.Println("No players found.")
+			break
+		}
 
-			// Check if the results array is empty
-			results, ok := rawResponse["results"].([]interface{})
-			if !ok || len(results) == 0 {
-				log.Println("No players found.")
-				return
-			}
+		// Parse each player
+		for _, playerData := range results {
+			player := ParsePlayers(playerData.(map[string]interface{}))
+			players = append(players, player)
+		}
 
-			// Parse each player
-			for _, playerData := range results {
-				player := ParsePlayers(playerData.(map[string]interface{}))
-				players = append(players, player)
-			}
-
-			// Check if there is a next page
-			if nextURL, ok := rawResponse["next"].(string); ok && nextURL != "" {
-				page++
-			} else {
-				log.Println("No more pages.")
-				page = 0 // Break the loop
-			}
-		}()
-
-		// Break the loop if there are no more pages
-		if page == 0 {
+		// Check if there is a next page
+		if nextURL, ok := rawResponse["next"].(string); ok && nextURL != "" {
+			page++
+		} else {
+			log.Println("No more pages.")
 			break
 		}
 	}
 
 	log.Printf("PLAYERS: \n%v", players)
-
 	log.Println("API data fetched.")
 	return players
 }
