@@ -33,24 +33,27 @@
     </div>
 
     <div id="curr-captain">
-        <h1>{{index .draftOrder 0.Name}}</h1>
+        <h1>Your Turn: {{.currentCaptain}}</h1>
     </div>
 
     <h2>Players List</h2>
-    <div class="players-grid">
-        {{range $index, $player := .draftPlayers}}
-        <!-- Wrapping each card and radio button in a label so both are clickable -->
-        <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
-            <div class="radio-btn">
-                <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer">
-            </div>
-            <h3>{{.Name}}</h3>
-            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
-            <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
-            <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
-        </label>
-        {{end}}
-    </div>
+    <form method="POST" action="/pick-player">
+        <div class="players-grid">
+            {{range $index, $player := .players}}
+            <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
+                <div class="radio-btn">
+                    <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer" value="{{.Name}}">
+                </div>
+                <h3>{{.Name}}</h3>
+                <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+                <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+                <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+            </label>
+            {{end}}
+        </div>
+        <br><br>
+        <button type="submit" class="confirm-btn">Confirm Pick</button>
+    </form>
 
     <script>
         function toggleRadio(radioId) {

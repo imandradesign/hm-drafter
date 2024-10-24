@@ -27,7 +27,10 @@ var (
 	captains            []string
 	captainCount        int
 	draftPlayers        []Players
+	draftOrder          []CaptainDraft
 	remaininPlayerCount int
+	currentCaptainIndex int
+	draftDirection      int
 )
 
 func main() {
@@ -111,7 +114,11 @@ func main() {
 
 	// Drafting page route (accessible at /drafting)
 	router.GET("/drafting", func(c *gin.Context) {
-		draftOrder := CaptainDraftOrder(captains)
+		draftOrder = CaptainDraftOrder(captains)
+
+		// Set initial values for the draft state
+		currentCaptainIndex = 0 // Start with the first captain
+		draftDirection = 1      // Start with ascending order
 
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
@@ -121,6 +128,27 @@ func main() {
 			"draftPlayers": draftPlayers,
 		})
 	})
+
+	// Handle the player selection and advance the draft turn
+	router.POST("/pick-player", func(c *gin.Context) {
+		selectedPlayer := c.PostForm("selectedPlayer")
+
+		// Remove the selected player from the list
+		draftPlayers = RemoveDraftedPlayers(draftPlayers, selectedPlayer)
+
+		// Advance the draft turn
+		advanceDraftTurn(draftOrder)
+
+		// Re-render the drafting page with the updated current captain
+		c.HTML(http.StatusOK, "drafting.html", gin.H{
+			"captainCount":         captainCount,
+			"remaininPlayerCount":  remaininPlayerCount,
+			"draftOrder":           draftOrder,
+			"currentCaptain":       draftOrder[currentCaptainIndex].Name,
+			"players":              draftPlayers,
+		})
+	})
+
 
 	err := router.Run(":" + port)
 	if err != nil {
