@@ -70,6 +70,27 @@
             checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
             checkbox.focus(); // Ensure the checkbox receives focus after clicking the card
         }
+
+        function confirmCaptainsSelection() {
+            // Get all selected checkboxes (captains)
+            const checkboxes = document.querySelectorAll('input[name="selectedPlayers"]:checked');
+            const captains = [];
+            checkboxes.forEach((checkbox) => {
+                captains.push(checkbox.value);
+            });
+
+            // If no captains are selected, show an alert and prevent submission
+            if (captains.length === 0) {
+                alert('No captains selected. Please select at least one captain.');
+                return false;
+            }
+
+            // Build the confirmation message
+            const confirmationMessage = `Are you sure? Your captains are:\n\n${captains.join('\n')}`;
+
+            // Show a confirmation dialog, and only submit if the user confirms
+            return confirm(confirmationMessage);
+        }
     </script>
 </body>
 
