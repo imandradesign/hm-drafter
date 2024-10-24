@@ -40,7 +40,6 @@ func main() {
 
 	router.Static("/static", "./static")
 
-
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data
 		tournaments := GetPDXTournies()
@@ -48,6 +47,7 @@ func main() {
 		c.HTML(http.StatusOK, "index.html", gin.H{
 			"tournaments": tournaments,
 			"selectedTournament": selectedTournament,
+			"players":            players,
 		})
 	})
 
