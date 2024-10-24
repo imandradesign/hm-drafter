@@ -1,34 +1,45 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+/* General container for players */
+.players-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-h1,
-h2 {
-    color: #333;
-}
-
-form {
-    margin-bottom: 20px;
-}
-
-.players-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
+/* Each player card */
 .player-card {
+    position: relative;
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 15px;
-    background-color: #f9f9f9;
+    padding: 16px;
+    width: 200px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.player-card h3 {
-    margin-top: 0;
+.player-card:hover {
+    background-color: #f0f0f0;
 }
 
-.player-card p {
+/* Player info */
+.player-info h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+}
+
+.player-info p {
     margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Radio button styling */
+.radio-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+input[type="radio"] {
+    transform: scale(1.5);
+    cursor: pointer;
 }
