@@ -32,10 +32,10 @@ body {
     position: absolute;
     top: 20px;
     right: 20px;
-    height: 40px;
-    width: 40px;
 }
 
 input[type="radio"] {
     cursor: pointer;
+    height: 40px;
+    width: 40px;
 }
