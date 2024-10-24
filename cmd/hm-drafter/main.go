@@ -106,9 +106,7 @@ func main() {
 		draftPlayers = RemoveCaptainsFromPlayers(players, captains)
 		remaininPlayerCount = len(draftPlayers)
 
-		c.HTML(http.StatusOK, "confirm.html", gin.H{
-			"redirectURL": "/drafting",
-		})
+		c.Redirect(http.StatusFound, "/drafting")
 	})
 
 	// Drafting page route (accessible at /drafting)

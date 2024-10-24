@@ -29,7 +29,9 @@
         {{if .selectedTournament}}
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
-            <p><center><strong>Player Count: </strong>{{.playerCount}}</center></p>
+            <p>
+                <center><strong>Player Count: </strong>{{.playerCount}}</center>
+            </p>
             <p><strong>ID: </strong>{{index .selectedTournament 0}}</p>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
             <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
@@ -39,7 +41,8 @@
 
     {{if .players}}
     <h2>Select Your Captains</h2>
-    <form id="captainsForm" method="POST" action="/confirm-captains">
+    <!-- Add onsubmit to call the confirmation function -->
+    <form id="captainsForm" method="POST" action="/confirm-captains" onsubmit="return confirmCaptainsSelection()">
         <div class="players-grid">
             {{range $index, $player := .players}}
             <label class="player-card" for="playerCheckbox{{$index}}">
