@@ -9,28 +9,33 @@
 </head>
 
 <body>
-    <h1>Select a Portland Tournament</h1>
+    <div class="header-container">
+        <div class="tournament-select">
+            <h1>Select a Portland Tournament</h1>
+            <form method="POST" action="/confirm">
+                <label for="tournament">Choose a tournament:</label>
+                <select id="tournament" name="tournament">
+                    {{range $index, $tournament := .tournaments}}
+                    <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
+                    {{else}}
+                    <option>No tournaments available</option>
+                    {{end}}
+                </select>
+                <br><br>
+                <button type="submit">Confirm</button>
+            </form>
+        </div>
 
-    <form method="POST" action="/confirm">
-        <label for="tournament">Choose a tournament:</label>
-        <select id="tournament" name="tournament">
-            {{range $index, $tournament := .tournaments}}
-            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
-            {{else}}
-            <option>No tournaments available</option>
+        {{if .selectedTournament}}
+        <div class="selected-tournament-box">
+            <h2>Selected Tournament:</h2>
+            <p>ID: {{index .selectedTournament 0}}</p>
+            <p>Name: {{index .selectedTournament 1}}</p>
+            <p>Date: {{index .selectedTournament 2}}</p>
+            <p>Player Count: {{.playerCount}}</p>
             {{end}}
-        </select>
-        <br><br>
-        <button type="submit">Confirm</button>
-    </form>
-
-    {{if .selectedTournament}}
-    <h2>Selected Tournament:</h2>
-    <p>ID: {{index .selectedTournament 0}}</p>
-    <p>Name: {{index .selectedTournament 1}}</p>
-    <p>Date: {{index .selectedTournament 2}}</p>
-    <p>Player Count: {{.playerCount}}</p>
-    {{end}}
+        </div>
+    </div>
 
     {{if .players}}
     <h2>Select Your Captains</h2>

@@ -2,6 +2,25 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.tournament-select {
+    flex-grow: 1;
+}
+
+.selected-tournament-box {
+    background-color: #e0f7fa;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin-left: 20px;
+    width: 250px;
+}
+
 .players-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
