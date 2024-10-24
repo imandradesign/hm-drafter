@@ -62,6 +62,7 @@ func GetPDXTournies() (portlandTournies [][]string) {
 
 			listLen = len(portlandTournies)
 			if listLen == 10 {
+				log.Println("API data fetched.")
 				return portlandTournies
 			}
 		}

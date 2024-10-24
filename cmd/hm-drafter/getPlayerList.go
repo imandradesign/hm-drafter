@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -32,11 +33,31 @@ func ParsePlayers(data map[string]interface{}) Players {
 	for _, field := range formFields {
 		fieldName := field[0] // e.g., "question216"
 		if value, ok := data[fieldName]; ok {
-			player.FormFields[field[1]] = value.(string) // field[1] is the slug like "discord"
+			// Handle the different types the value could have
+			switch v := value.(type) {
+			case string:
+				player.FormFields[field[1]] = v // field[1] is the slug like "discord"
+			case []interface{}:
+				// Convert array to a string representation
+				var strValues []string
+				for _, item := range v {
+					strValues = append(strValues, fmt.Sprintf("%v", item))
+				}
+				player.FormFields[field[1]] = fmt.Sprintf("[%s]", stringArrayToCSV(strValues))
+			default:
+				// Handle other types as needed
+				player.FormFields[field[1]] = fmt.Sprintf("%v", value)
+			}
 		}
 	}
 	return player
 }
+
+// Helper function to convert []string to CSV format
+func stringArrayToCSV(array []string) string {
+	return strings.Join(array, ", ")
+}
+
 
 func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("Fetching player data...")
