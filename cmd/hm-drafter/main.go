@@ -114,6 +114,7 @@ func main() {
 		draftOrder := CaptainDraftOrder(captains)
 
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
+			"selectedTournament": selectedTournament,
 			"captainCount": captainCount,
 			"remaininPlayerCount": remaininPlayerCount,
 			"draftOrder": draftOrder,
