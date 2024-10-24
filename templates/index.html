@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portland Tournaments</title>
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body>
@@ -14,8 +15,7 @@
         <label for="tournament">Choose a tournament:</label>
         <select id="tournament" name="tournament">
             {{range $index, $tournament := .tournaments}}
-            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index
-                $tournament 2}}</option>
+            <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
             {{else}}
             <option>No tournaments available</option>
             {{end}}
@@ -29,6 +29,18 @@
     <p>ID: {{index .selectedTournament 0}}</p>
     <p>Name: {{index .selectedTournament 1}}</p>
     <p>Date: {{index .selectedTournament 2}}</p>
+
+    <h2>Players List</h2>
+    <div class="players-grid">
+        {{range .players}}
+        <div class="player-card">
+            <h3>{{.Name}}</h3>
+            <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+            <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+            <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+        </div>
+        {{end}}
+    </div>
     {{end}}
 </body>
 
