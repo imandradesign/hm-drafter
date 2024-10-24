@@ -39,3 +39,32 @@ input[type="radio"] {
     height: 40px;
     width: 40px;
 }
+
+/* iPad specific optimizations */
+@media only screen and (max-width: 1024px) {
+    .players-grid {
+        grid-template-columns: 1fr;
+        /* Single column on smaller screens */
+    }
+
+    .radio-btn {
+        height: 30px;
+        width: 30px;
+        top: 10px;
+        right: 10px;
+    }
+
+    input[type="radio"] {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+
+    /* Adjust grid for iPad landscape mode */
+    .players-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns for landscape */
+    }
+}
