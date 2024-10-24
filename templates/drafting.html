@@ -9,16 +9,16 @@
 </head>
 
 <body>
-    <div class="draft-order">
-        <h2>Snake Draft Order</h2>
-        <ol>
-            {{range .draftOrder}}
-            <li>{{.Name}}</li>
-            {{end}}
-        </ol>
-    </div>
-
     <div class="header-container"></div>
+        <div class="draft-order">
+            <h2>Snake Draft Order</h2>
+            <ol>
+                {{range .draftOrder}}
+                <li>{{.Name}}</li>
+                {{end}}
+            </ol>
+        </div>
+        
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
@@ -38,7 +38,7 @@
 
     <h2>Players List</h2>
     <div class="players-grid">
-        {{range $index, $player := .players}}
+        {{range $index, $player := .draftPlayers}}
         <!-- Wrapping each card and radio button in a label so both are clickable -->
         <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
             <div class="radio-btn">

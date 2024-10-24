@@ -118,7 +118,7 @@ func main() {
 			"captainCount": captainCount,
 			"remaininPlayerCount": remaininPlayerCount,
 			"draftOrder": draftOrder,
-			"players":     draftPlayers,
+			"draftPlayers": draftPlayers,
 		})
 	})
 
