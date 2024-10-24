@@ -23,12 +23,9 @@
             <h2>Selected Tournament</h2>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
             <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
-            <p>
-                <center>
-                    <strong>Captain Count: </strong>{{.captainCount}}<br>
-                    <strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}
-                </center>
-            </p>
+            <br>
+            <p><strong>Captain Count: </strong>{{.captainCount}}</p>
+            <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
         </div>
     </div>
 
@@ -39,7 +36,7 @@
     <h2>Players List</h2>
     <form method="POST" action="/pick-player">
         <div class="players-grid">
-            {{range $index, $player := .players}}
+            {{range $index, $player := .draftPlayers}}
             <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
                 <div class="radio-btn">
                     <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer" value="{{.Name}}">
@@ -52,7 +49,7 @@
             {{end}}
         </div>
         <br><br>
-        <button type="submit" class="confirm-btn">Confirm Pick</button>
+        <button type="submit" class="confirm-btn">Claim Player</button>
     </form>
 
     <script>

@@ -106,26 +106,27 @@ func main() {
 			return
 		}
 
+		// Save initial draft info
 		draftPlayers = RemoveCaptainsFromPlayers(players, captains)
 		remaininPlayerCount = len(draftPlayers)
+
+		// Set initial values for the draft state
+		draftOrder = CaptainDraftOrder(captains)
+		currentCaptainIndex = 0 // Start with the first captain
+		draftDirection = 1      // Start with ascending order
 
 		c.Redirect(http.StatusFound, "/drafting")
 	})
 
 	// Drafting page route (accessible at /drafting)
 	router.GET("/drafting", func(c *gin.Context) {
-		draftOrder = CaptainDraftOrder(captains)
-
-		// Set initial values for the draft state
-		currentCaptainIndex = 0 // Start with the first captain
-		draftDirection = 1      // Start with ascending order
-
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
 			"captainCount": captainCount,
 			"remaininPlayerCount": remaininPlayerCount,
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
+			"currentCaptain": draftOrder[currentCaptainIndex].Name,
 		})
 	})
 
