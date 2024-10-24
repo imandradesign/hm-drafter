@@ -38,6 +38,9 @@ func main() {
 	// Load HTML templates
 	router.LoadHTMLFiles("templates/index.html")
 
+	router.Static("/static", "./static")
+
+
 	router.GET("/", func(c *gin.Context) {
 		// Fetch tournament data
 		tournaments := GetPDXTournies()
