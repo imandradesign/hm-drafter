@@ -17,11 +17,10 @@ type Players struct {
 }
 
 type PlayersApiResponse struct {
-	Results []Players `json:"results"`
+	Results []map[string]interface{} `json:"results"`
 }
 
 func ParsePlayers(data map[string]interface{}) Players {
-	// Extract static fields like name, scene, pronouns, and ID
 	player := Players{
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
@@ -31,7 +30,7 @@ func ParsePlayers(data map[string]interface{}) Players {
 		FormFields: make(map[string]string),
 	}
 
-	// Process dynamic form fields if they exist
+	// Process dynamic form fields
 	for _, field := range formFields {
 		fieldName := field[0]
 		if value, ok := data[fieldName]; ok {
@@ -89,8 +88,11 @@ func GetPlayersData(tournamentID string) (players []Players) {
 			break
 		}
 
-		// Add the current page's players to the slice
-		players = append(players, playerApiResponse.Results...)
+		// Parse each player result and add it to the players slice
+		for _, playerData := range playerApiResponse.Results {
+			parsedPlayer := ParsePlayers(playerData)
+			players = append(players, parsedPlayer)
+		}
 
 		// Increment the page for the next iteration
 		page++
