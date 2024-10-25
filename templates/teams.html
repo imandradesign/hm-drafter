@@ -21,11 +21,14 @@
 
             <div id="existing-teams">
                 <h3>Existing Teams</h3>
+                {{range .teams}}
+                {{.Name}}
                 <ul>
-                    {{range .teams}}
-                        <li>{{.Name}}</li>
+                    {{range .Players}}
+                    <li>{{.Players.Name}}</li>
                     {{end}}
                 </ul>
+                {{end}}
             </div>
         </div>
 
