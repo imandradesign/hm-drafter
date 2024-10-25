@@ -74,6 +74,13 @@ func AddTeam(teamName string, tournamentID string) error {
 	client, req := createRequest("POST", api, bytes.NewBuffer(teamJSON))
 	req.Header.Set("Content-Type", "application/json")
 
+	for name, values := range req.Header {
+		for _, value := range values {
+			log.Printf("Header: %s = %s", name, value)
+		}
+	}
+	log.Printf("Request Cookies: %v", req.Cookies())
+
 	// Make the POST request
 	resp, err := client.Do(req)
 	if err != nil {
@@ -86,6 +93,8 @@ func AddTeam(teamName string, tournamentID string) error {
 		body, _ := io.ReadAll(resp.Body)
 		return fmt.Errorf("Failed to add team. Status: %v, Response: %s", resp.Status, string(body))
 	}
+
+	log.Printf("Request to add team returned status: %v", resp.Status)
 
 	return nil
 }
