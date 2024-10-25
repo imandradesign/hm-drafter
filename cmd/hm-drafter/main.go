@@ -39,20 +39,6 @@ var (
 	teams               [][]string
 )
 
-func init() {
-    // Retrieve the session ID from the environment
-    sessionID = os.Getenv("SESSION_ID")
-    if sessionID == "" {
-        log.Fatal("Session ID not set in environment")
-    }
-
-    // Initialize the session cookie
-    cookie = &http.Cookie{
-        Name:  "sessionid",
-        Value: sessionID,
-    }
-}
-
 // Helper function to create an HTTP request with the session cookie
 func createRequest(method, url string, body io.Reader) (client *http.Client, req *http.Request) {
 	client = &http.Client{
@@ -65,8 +51,12 @@ func createRequest(method, url string, body io.Reader) (client *http.Client, req
         return nil, nil
     }
 
+	log.Printf("Cookie: %v", cookie)
+
     // Attach the session cookie
     req.AddCookie(cookie)
+
+	log.Print("Supposedly attached cookie to request.")
 
     return client, req
 }
@@ -77,6 +67,18 @@ func main() {
 	if port == "" {
 		port = "8000" // Default
 	}
+
+	// Retrieve the session ID from the environment
+    sessionID = os.Getenv("SESSION_ID")
+    if sessionID == "" {
+        log.Fatal("Session ID not set in environment")
+    }
+
+    // Initialize the session cookie
+    cookie = &http.Cookie{
+        Name:  "sessionid",
+        Value: sessionID,
+    }
 
 	router := gin.New()
 	router.Use(gin.Logger())
