@@ -23,7 +23,7 @@
                 <h3>Existing Teams</h3>
                 <ul>
                     {{range .teams}}
-                        <li>{{index . 0}}</li>
+                        <li>{{.Name}}</li>
                     {{end}}
                 </ul>
             </div>
@@ -36,6 +36,12 @@
             <br>
             <p><strong>Captain Count: </strong>{{.captainCount}}</p>
             <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
+            <p><strong>Captain Names:</strong></p>
+            <ul>
+                {{range .draftOrder}}
+                <li>{{.Name}}</li>
+                {{end}}
+            </ul>
         </div>
     </div>
 
