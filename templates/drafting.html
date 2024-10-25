@@ -17,6 +17,10 @@
                 <li>{{.Name}}</li>
                 {{end}}
             </ol>
+
+            <div id="curr-captain">
+                <h1>Your Turn: {{.currentCaptain}}</h1>
+            </div>
         </div>
 
         <div class="selected-tournament-box">
@@ -27,10 +31,6 @@
             <p><strong>Captain Count: </strong>{{.captainCount}}</p>
             <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
         </div>
-    </div>
-
-    <div id="curr-captain">
-        <h1>Your Turn: {{.currentCaptain}}</h1>
     </div>
 
     <h2>Players List</h2>

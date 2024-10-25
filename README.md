@@ -7,3 +7,5 @@
 ---
 
 **HM API:** `https://kqhivemind.com/api/tournament/`
+
+Built with Heroku.

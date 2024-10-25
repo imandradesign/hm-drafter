@@ -18,6 +18,16 @@
                 <button type="submit">Add Team</button>
             </form>
             <div id="teamMessage"></div>
+
+            <div id="existing-teams">
+                <h3>Existing Teams</h3>
+                <ol>
+                    <!-- TODO API call to get team list -->
+                    <!-- {{range .teams}}
+                        <li>{{.Name}}</li>
+                        {{end}} -->
+                </ol>
+            </div>
         </div>
 
         <div class="selected-tournament-box">
@@ -28,16 +38,6 @@
             <p><strong>Captain Count: </strong>{{.captainCount}}</p>
             <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
         </div>
-    </div>
-
-    <div id="existing-teams">
-        <h3>Existing Teams</h3>
-        <ol>
-            <!-- TODO API call to get team list -->
-            <!-- {{range .teams}}
-            <li>{{.Name}}</li>
-            {{end}} -->
-        </ol>
     </div>
 
     <div>
