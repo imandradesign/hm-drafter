@@ -50,9 +50,10 @@ func GetTeams(tournamentID string) (teams [][]string) {
 }
 
 func AddTeam(teamName string, tournamentID string) error {
+	// Convert tournament ID to an integer
 	tournamentIDInt, err := strconv.Atoi(tournamentID)
 	if err != nil {
-		log.Print("Unable to convert tournament ID str to int in AddTeam() func.")
+		log.Print("Unable to convert tournament ID string to int in AddTeam() func.")
 	}
 
 	// Create the team struct to send to the API
@@ -69,13 +70,11 @@ func AddTeam(teamName string, tournamentID string) error {
 
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
-	// Use createRequest to get the client and request with the cookie attached
+	// Use createRequest to include the session cookie
 	client, req := createRequest("POST", api, bytes.NewBuffer(teamJSON))
-
-	// Set the content type header
 	req.Header.Set("Content-Type", "application/json")
 
-	// Send the request
+	// Make the POST request
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("error making POST request: %v", err)
