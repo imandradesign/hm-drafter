@@ -51,8 +51,6 @@ func createRequest(method, url string, body io.Reader) (client *http.Client, req
         return nil, nil
     }
 
-	log.Printf("Cookie: %v", cookie)
-
     // Attach the session cookie
     req.AddCookie(cookie)
 

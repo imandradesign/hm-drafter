@@ -22,15 +22,21 @@ type PlayersApiResponse struct {
 
 func ParsePlayers(data map[string]interface{}) Players {
 	player := Players{
+		ID :        data["user"].(float64),
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
 		Pronouns:   safeString(data["pronouns"]),
-		ID:         data["user"].(float64),
-		Team:       int(data["team"].(float64)),
 		FormFields: make(map[string]string),
 	}
 
-	// Process dynamic form fields
+	// Check if "team" exists and is not nil, then convert it
+	if teamVal, ok := data["team"]; ok && teamVal != nil {
+		player.Team = teamVal.(int)
+	} else {
+		player.Team = 0 // Default or placeholder value if "team" is missing or nil
+	}
+
+	// Process dynamic form fields if they exist
 	for _, field := range formFields {
 		fieldName := field[0]
 		if value, ok := data[fieldName]; ok {
@@ -51,6 +57,7 @@ func ParsePlayers(data map[string]interface{}) Players {
 
 	return player
 }
+
 
 // Helper function to safely convert a field to a string, handling nil cases
 func safeString(value interface{}) string {
