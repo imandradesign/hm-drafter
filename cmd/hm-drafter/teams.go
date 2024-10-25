@@ -47,9 +47,11 @@ func getTeams(tournamentID string) (teams [][]string) {
 	}
 
 	for _, team := range teamApiResponse.Results {
+		log.Printf("Team retrieved: %v", team.Name)
 		teams = append(teams, []string{team.Name})
 	}
 
+	log.Printf("TEAMS:\n%v", teams)
 	return teams
 }
 
