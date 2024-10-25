@@ -21,7 +21,7 @@ type TeamApiResponse struct {
 }
 
 func getTeams(tournamentID string) (teams [][]string) {
-	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v", tournamentID)
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v&format=json", tournamentID)
 
 	client := &http.Client{
     	Timeout: 10 * time.Second,
@@ -58,7 +58,7 @@ func AddTeam(teamName string, tournamentID string) error {
 	if err != nil {
 		log.Print("Unable to convert tournament ID str to int in AddTeam() func.")
 	}
-	
+
 	// Create the team struct to send to the API
 	newTeam := Team{
 		Name:       teamName,
@@ -71,7 +71,7 @@ func AddTeam(teamName string, tournamentID string) error {
 		return fmt.Errorf("error marshalling team data: %v", err)
 	}
 
-	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v", tournamentID)
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v&format=json", tournamentID)
 
 	// Make the POST request to the API
 	resp, err := http.Post(api, "application/json", bytes.NewBuffer(teamJSON))
