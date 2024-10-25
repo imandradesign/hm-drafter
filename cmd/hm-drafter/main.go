@@ -149,6 +149,10 @@ func main() {
 		}
 
 		// Success, redirect back to the team creation section
+		c.Redirect(http.StatusFound, "/teams")
+	})
+
+	router.POST("/confirm-teams",func(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/drafting")
 	})
 

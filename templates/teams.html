@@ -10,12 +10,12 @@
 
 <body>
     <div class="header-container">
-        <div class="team-creation-section">
+        <div id="team-creation-section">
             <h2>Add Teams</h2>
-            <form id="teamForm">
+            <form id="teamForm" method="POST" action="/add-team">
                 <label for="teamName">Enter Team Name:</label>
-                <input type="text" id="teamName" name="teamName" placeholder="Team Name">
-                <button type="button" onclick="AddTeam()">Add Team</button>
+                <input type="text" id="teamName" name="teamName" placeholder="Team Name" required>
+                <button type="submit">Add Team</button>
             </form>
             <div id="teamMessage"></div>
         </div>
@@ -30,10 +30,35 @@
         </div>
     </div>
 
+    <div id="existing-teams">
+        <h3>Existing Teams</h3>
+        <ol>
+            <!-- Assuming you retrieve teams from the backend, uncomment the code below -->
+            <!-- {{range .teams}}
+            <li>{{.Name}}</li>
+            {{end}} -->
+        </ol>
+    </div>
+
+    <div>
+        <center>
+            <h3>Ready to Start the Draft?</h3>
+            <br>
+            <!-- Button calls JavaScript function to confirm before redirecting -->
+            <button type="button" class="confirm-btn" onclick="confirmDoneAddingTeams()">Done Adding Teams</button>
+        </center>
+    </div>
+
     <script>
-        // Confirm done adding teams
+        // Function to confirm before finalizing teams
         function confirmDoneAddingTeams() {
             const isDone = confirm('Are you sure you are done adding teams?');
+            if (isDone) {
+                // Redirect to /confirm-teams to finalize team additions
+                document.getElementById("teamForm").action = "/confirm-teams";
+                document.getElementById("teamForm").method = "POST";
+                document.getElementById("teamForm").submit();
+            }
         }
     </script>
 </body>
