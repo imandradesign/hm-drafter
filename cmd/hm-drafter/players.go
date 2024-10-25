@@ -12,13 +12,14 @@ type Players struct {
 	Scene      string    `json:"scene"`
 	Pronouns   string    `json:"pronouns"`
 	FormFields map[string]string
+	TeamInfo *TeamInfo `json:"team_info,omitempty"`
 }
 
 type PlayersApiResponse struct {
 	Results []Players `json:"results"`
 }
 
-func ParsePlayers(data map[string]interface{}) Players {
+func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players {
 	// Extract static fields like name, scene, pronouns, checking if they are nil first
 	player := Players{
 		Name:     safeString(data["name"]),
@@ -47,6 +48,15 @@ func ParsePlayers(data map[string]interface{}) Players {
 			}
 		}
 	}
+
+	// Assign team info if team ID exists in teamMap
+    if teamID, ok := data["team"].(float64); ok {
+        intTeamID := int(teamID)
+        if team, found := teamMap[intTeamID]; found {
+            player.TeamInfo = &team
+        }
+    }
+	
 	return player
 }
 
@@ -62,20 +72,22 @@ func safeString(value interface{}) string {
 func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("Fetching player data...")
 
+	// Fetch teams for the tournament
+    teams := GetTeams(tournamentId)
+    teamMap := make(map[int]TeamInfo)
+    for _, team := range teams {
+        teamMap[team.ID] = team
+    }
+
 	page := 1
 	for {
-		log.Printf("Fetching page: %d", page)
-
 		// Build the API URL for the current page
 		api := fmt.Sprintf(apiTemplate, "player", fmt.Sprintf("&tournament_id=%v", tournamentId), fmt.Sprintf("&page=%d", page))
-
 		client, req := createRequest("GET", api, nil)
-
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatal(err)
 		}
-		
 		defer resp.Body.Close()
 
 		// Parse the response into a generic map
@@ -94,7 +106,7 @@ func GetPlayersData(tournamentId string) (players []Players) {
 
 		// Parse each player
 		for _, playerData := range results {
-			player := ParsePlayers(playerData.(map[string]interface{}))
+			player := ParsePlayers(playerData.(map[string]interface{}), teamMap)
 			players = append(players, player)
 		}
 
