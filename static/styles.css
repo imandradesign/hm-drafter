@@ -87,6 +87,11 @@ input[type="checkbox"] {
     width: 40px;
 }
 
+#team-message {
+    color: green;
+    margin-top: 10px;
+}
+
 /* iPad specific optimizations */
 @media only screen and (max-width: 1024px) {
     .players-grid {

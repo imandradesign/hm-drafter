@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -115,6 +116,29 @@ func main() {
 		currentCaptainIndex = 0 // Start with the first captain
 		draftDirection = 1      // Start with ascending order
 
+		c.Redirect(http.StatusFound, "/drafting")
+	})
+
+	// Handle the POST request for adding a team
+	router.POST("/add-team", func(c *gin.Context) {
+		teamName := c.PostForm("teamName")
+		tournamentID := c.PostForm("tournamentID")
+
+		// Convert tournamentID to an integer
+		tournamentIDInt, err := strconv.Atoi(tournamentID)
+		if err != nil {
+			c.String(http.StatusBadRequest, "Invalid tournament ID")
+			return
+		}
+
+		// Call the function to add the team
+		err = AddTeam(teamName, tournamentIDInt)
+		if err != nil {
+			c.String(http.StatusInternalServerError, fmt.Sprintf("Error adding team: %v", err))
+			return
+		}
+
+		// Success, redirect back to the team creation section
 		c.Redirect(http.StatusFound, "/drafting")
 	})
 

@@ -39,60 +39,121 @@
         </div>
     </div>
 
-    {{if .players}}
-    <h2>Select Your Captains</h2>
-    <!-- Add onsubmit to call the confirmation function -->
-    <form id="captainsForm" method="POST" action="/confirm-captains" onsubmit="return confirmCaptainsSelection()">
-        <div class="players-grid">
-            {{range $index, $player := .players}}
-            <label class="player-card" for="playerCheckbox{{$index}}">
-                <div class="checkbox-btn">
-                    <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}"
-                        onclick="event.stopPropagation();">
-                </div>
-                <h2>{{.Name}}</h2>
-                <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields " captain") "Yes" ) (eq (index
-                            .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
-                            "captain"}}</span></strong></h3>
-                <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
-                <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
-                <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
-                <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
-                <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
-            </label>
-            {{end}}
-        </div>
-        <br><br>
-        <center><button type="submit" class="confirm-btn">Confirm Captains</button></center>
-    </form>
-    {{end}}
+    <div id="players-section" style="display: block;">
+        {{if .players}}
+        <h2>Select Your Captains</h2>
+        <form id="captainsForm" method="POST" action="/confirm-captains" onsubmit="return confirmCaptainsSelection()">
+            <div class="players-grid">
+                {{range $index, $player := .players}}
+                <label class="player-card" for="playerCheckbox{{$index}}">
+                    <div class="checkbox-btn">
+                        <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}"
+                            onclick="event.stopPropagation();">
+                    </div>
+                    <h2>{{.Name}}</h2>
+                    <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields " captain") "Yes" ) (eq (index
+                                .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
+                                "captain"}}</span></strong></h3>
+                    <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
+                    <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+                    <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
+                    <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+                    <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+                </label>
+                {{end}}
+            </div>
+            <br><br>
+            <center><button type="submit" class="confirm-btn">Confirm Captains</button></center>
+        </form>
+        {{end}}
+    </div>
+
+    <div id="team-creation-section" style="display: none;">
+        <h2>Add Teams</h2>
+        <form id="teamForm">
+            <label for="teamName">Enter Team Name:</label>
+            <input type="text" id="teamName" name="teamName" placeholder="Team Name">
+            <button type="button" onclick="submitTeamName()">Add Team</button>
+        </form>
+        <div id="teamMessage"></div>
+
+        <center><button type="button" class="confirm-btn" onclick="confirmDoneAddingTeams()">Done Adding Teams</button>
+        </center>
+    </div>
 
     <script>
         function toggleCheckbox(checkboxId) {
             var checkbox = document.getElementById(checkboxId);
-            checkbox.checked = !checkbox.checked; // Toggle checkbox checked state
-            checkbox.focus(); // Ensure the checkbox receives focus after clicking the card
+            checkbox.checked = !checkbox.checked;
+            checkbox.focus(); // Ensure the checkbox receives focus after clicking the player card
         }
 
         function confirmCaptainsSelection() {
-            // Get all selected checkboxes (captains)
             const checkboxes = document.querySelectorAll('input[name="selectedPlayers"]:checked');
             const captains = [];
             checkboxes.forEach((checkbox) => {
                 captains.push(checkbox.value);
             });
 
-            // If no captains are selected, show an alert and prevent submission
             if (captains.length === 0) {
                 alert('No captains selected. Please select at least one captain.');
                 return false;
             }
 
-            // Build the confirmation message
             const confirmationMessage = `Are you sure? Your captains are:\n\n${captains.join('\n')}`;
+            const isConfirmed = confirm(confirmationMessage);
 
-            // Show a confirmation dialog, and only submit if the user confirms
-            return confirm(confirmationMessage);
+            if (isConfirmed) {
+                // Hide the players section
+                document.getElementById('players-section').style.display = 'none';
+                // Show the team creation section
+                document.getElementById('team-creation-section').style.display = 'block';
+            }
+
+            return isConfirmed;
+        }
+
+        // Submit team name to the API
+        function submitTeamName() {
+            const teamName = document.getElementById('teamName').value;
+            const tournamentId = '{{index .selectedTournament 0}}'; // Fetch the tournament ID from the context
+
+            if (teamName.trim() === '') {
+                alert('Please enter a valid team name');
+                return;
+            }
+
+            fetch(`https://kqhivemind.com/api/tournament/team/?tournament_id=${tournamentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: teamName,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('teamMessage').innerText = `Team "${teamName}" added successfully!`;
+                        document.getElementById('teamName').value = ''; // Clear the input
+                    } else {
+                        document.getElementById('teamMessage').style.color = 'red';
+                        document.getElementById('teamMessage').innerText = `Error adding team "${teamName}".`;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('teamMessage').style.color = 'red';
+                    document.getElementById('teamMessage').innerText = `Error: ${error.message}`;
+                });
+        }
+
+        // Confirm done adding teams
+        function confirmDoneAddingTeams() {
+            const isDone = confirm('Are you sure you are done adding teams?');
+            if (isDone) {
+                // You can perform any further actions here, such as moving to the next stage
+                alert('Teams added. Proceeding to the next step.');
+            }
         }
     </script>
 </body>
