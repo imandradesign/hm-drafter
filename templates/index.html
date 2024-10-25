@@ -68,19 +68,6 @@
         {{end}}
     </div>
 
-    <div id="team-creation-section" style="display: none;">
-        <h2>Add Teams</h2>
-        <form id="teamForm">
-            <label for="teamName">Enter Team Name:</label>
-            <input type="text" id="teamName" name="teamName" placeholder="Team Name">
-            <button type="button" onclick="submitTeamName()">Add Team</button>
-        </form>
-        <div id="teamMessage"></div>
-
-        <center><button type="button" class="confirm-btn" onclick="confirmDoneAddingTeams()">Done Adding Teams</button>
-        </center>
-    </div>
-
     <script>
         function toggleCheckbox(checkboxId) {
             var checkbox = document.getElementById(checkboxId);

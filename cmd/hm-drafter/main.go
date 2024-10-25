@@ -96,7 +96,7 @@ func main() {
 	})
 
 	// Handle the captain confirmation POST request
-	router.POST("/confirm-captains", func(c *gin.Context) {
+	router.POST("/confirm", func(c *gin.Context) {
 		// Get the selected captains from the form
 		captains = c.PostFormArray("selectedPlayers")
 		captainCount = len(captains)
