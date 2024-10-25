@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portland Mixer Drafting - Adding Teams</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="header-container">
+        <div class="selected-tournament-box">
+            <h2>Selected Tournament</h2>
+            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
+            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+            <br>
+            <p><strong>Captain Count: </strong>{{.captainCount}}</p>
+            <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
+        </div>
+    </div>
+    <div id="team-creation-section">
+        <h2>Add Teams</h2>
+        <form id="teamForm">
+            <label for="teamName">Enter Team Name:</label>
+            <input type="text" id="teamName" name="teamName" placeholder="Team Name">
+            <button type="button" onclick="AddTeam()">Add Team</button>
+        </form>
+        <div id="teamMessage"></div>
+
+        <center>
+            <button type="button" class="confirm-btn" onclick="confirmDoneAddingTeams()">Done Adding Teams</button>
+        </center>
+    </div>
+
+    <script>
+        // Confirm done adding teams
+        function confirmDoneAddingTeams() {
+            const isDone = confirm('Are you sure you are done adding teams?');
+        }
+    </script>
+</body>
+
+</html>

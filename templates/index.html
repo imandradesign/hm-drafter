@@ -113,40 +113,6 @@
             return isConfirmed;
         }
 
-        // Submit team name to the API
-        function submitTeamName() {
-            const teamName = document.getElementById('teamName').value;
-            const tournamentId = '{{index .selectedTournament 0}}'; // Fetch the tournament ID from the context
-
-            if (teamName.trim() === '') {
-                alert('Please enter a valid team name');
-                return;
-            }
-
-            fetch(`https://kqhivemind.com/api/tournament/team/?tournament_id=${tournamentId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: teamName,
-                }),
-            })
-                .then(response => {
-                    if (response.ok) {
-                        document.getElementById('teamMessage').innerText = `Team "${teamName}" added successfully!`;
-                        document.getElementById('teamName').value = ''; // Clear the input
-                    } else {
-                        document.getElementById('teamMessage').style.color = 'red';
-                        document.getElementById('teamMessage').innerText = `Error adding team "${teamName}".`;
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('teamMessage').style.color = 'red';
-                    document.getElementById('teamMessage').innerText = `Error: ${error.message}`;
-                });
-        }
-
         // Confirm done adding teams
         function confirmDoneAddingTeams() {
             const isDone = confirm('Are you sure you are done adding teams?');
