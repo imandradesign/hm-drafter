@@ -23,7 +23,7 @@
                 <h3>Existing Teams</h3>
                 <ol>
                     {{range .teams}}
-                        <li>{{.Name}}</li>
+                        <li>{{index . 0}}</li>
                     {{end}}
                 </ol>
             </div>
