@@ -36,7 +36,7 @@ var (
 	remaininPlayerCount int
 	currentCaptainIndex int
 	draftDirection      int
-	teams               [][]string
+	teams               []TeamInfo
 )
 
 // Helper function to create an HTTP request with the session cookie

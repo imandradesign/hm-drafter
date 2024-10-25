@@ -11,15 +11,21 @@ import (
 )
 
 type Team struct {
+	ID int `json:"id"`
 	Name string `json:"name"`
 	Tournament int `json:"tournament"`
+}
+
+type TeamInfo struct {
+	ID   int
+	Name string
 }
 
 type TeamApiResponse struct {
 	Results []Team `json:"results"`
 }
 
-func GetTeams(tournamentID string) (teams [][]string) {
+func GetTeams(tournamentID string) (teams []TeamInfo) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
@@ -42,7 +48,7 @@ func GetTeams(tournamentID string) (teams [][]string) {
 
 	for _, team := range teamApiResponse.Results {
 		log.Printf("Team retrieved: %v", team.Name)
-		teams = append(teams, []string{team.Name})
+		teams = append(teams, TeamInfo{ID: team.ID, Name: team.Name})
 	}
 
 	log.Printf("TEAMS:\n%v", teams)
