@@ -188,6 +188,8 @@ func main() {
 
 	// Drafting page route (accessible at /drafting)
 	router.GET("/drafting", func(c *gin.Context) {
+		teams = GetTeams(tournamentID, players)
+
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
 			"captainCount": captainCount,
@@ -209,6 +211,9 @@ func main() {
 		// Advance the draft turn
 		advanceDraftTurn(draftOrder)
 
+		// Get updated teams list
+		teams = GetTeams(tournamentID, players)
+
 		// Re-render the drafting page with the updated current captain
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
@@ -217,6 +222,7 @@ func main() {
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
 			"currentCaptain": draftOrder[currentCaptainIndex].Name,
+			"teams": teams,
 		})
 	})
 
