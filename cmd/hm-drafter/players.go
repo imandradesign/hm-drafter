@@ -22,16 +22,16 @@ type PlayersApiResponse struct {
 
 func ParsePlayers(data map[string]interface{}) Players {
 	player := Players{
-		ID :        data["user"].(float64),
+		ID:         data["user"].(float64),
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
 		Pronouns:   safeString(data["pronouns"]),
 		FormFields: make(map[string]string),
 	}
 
-	// Check if "team" exists and is not nil, then convert it
+	// Check if "team" exists and is not nil, then convert it safely
 	if teamVal, ok := data["team"]; ok && teamVal != nil {
-		player.Team = teamVal.(int)
+		player.Team = int(teamVal.(float64)) // safely cast to int if "team" exists and is float64
 	} else {
 		player.Team = 0 // Default or placeholder value if "team" is missing or nil
 	}
