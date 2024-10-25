@@ -51,7 +51,7 @@
                             onclick="event.stopPropagation();">
                     </div>
                     <h2>{{.Name}}</h2>
-                    <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields " captain") "Yes" ) (eq (index
+                    <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index
                                 .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
                                 "captain"}}</span></strong></h3>
                     <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
