@@ -20,8 +20,11 @@ type TeamApiResponse struct {
 	Results []Team `json:"results"`
 }
 
-func getTeams(tournamentID string) (teams [][]string) {
+func GetTeams(tournamentID string) (teams [][]string) {
+	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v&format=json", tournamentID)
+
+	log.Printf("API call: %v", api)
 
 	client := &http.Client{
     	Timeout: 10 * time.Second,
@@ -45,6 +48,8 @@ func getTeams(tournamentID string) (teams [][]string) {
 	if err := json.NewDecoder(resp.Body).Decode(&teamApiResponse); err != nil {
 		log.Fatal(err)
 	}
+
+	log.Printf("teamApiResponse: %v", teamApiResponse)
 
 	for _, team := range teamApiResponse.Results {
 		log.Printf("Team retrieved: %v", team.Name)

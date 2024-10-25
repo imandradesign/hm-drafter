@@ -121,7 +121,7 @@ func main() {
 	})
 
 	router.GET("/teams", func(c *gin.Context) {
-		teams = getTeams(tournamentID)
+		teams = GetTeams(tournamentID)
 
 		c.HTML(http.StatusOK, "teams.html", gin.H{
 			"selectedTournament":  selectedTournament,
