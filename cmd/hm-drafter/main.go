@@ -32,6 +32,7 @@ var (
 	remaininPlayerCount int
 	currentCaptainIndex int
 	draftDirection      int
+	teams               [][]string
 )
 
 func main() {
@@ -120,29 +121,24 @@ func main() {
 	})
 
 	router.GET("/teams", func(c *gin.Context) {
+		teams = getTeams(tournamentID)
+
 		c.HTML(http.StatusOK, "teams.html", gin.H{
 			"selectedTournament":  selectedTournament,
 			"remaininPlayerCount": remaininPlayerCount,
 			"playerCount":         playerCount,
 			"captainCount":        captainCount,
 			"draftOrder":          draftOrder,
+			"teams":               teams,
 		})
 	})
 
 	// Handle the POST request for adding a team
 	router.POST("/add-team", func(c *gin.Context) {
 		teamName := c.PostForm("teamName")
-		tournamentID := c.PostForm("tournamentID")
-
-		// Convert tournamentID to an integer
-		tournamentIDInt, err := strconv.Atoi(tournamentID)
-		if err != nil {
-			c.String(http.StatusBadRequest, "Invalid tournament ID")
-			return
-		}
 
 		// Call the function to add the team
-		err = AddTeam(teamName, tournamentIDInt)
+		err := AddTeam(teamName, tournamentID)
 		if err != nil {
 			c.String(http.StatusInternalServerError, fmt.Sprintf("Error adding team: %v", err))
 			return
