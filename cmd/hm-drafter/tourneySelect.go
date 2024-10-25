@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
-	"time"
 )
 
 type Tournament struct {
@@ -22,9 +20,6 @@ type TourneyAPIResponse struct {
 // GetPDXTournies takes the API string that lists all tournaments, checks the `results` list for entries where the `scene_name` is `kqpdx` and returns those events with their ID, name, and date in nested lists
 func GetPDXTournies() (portlandTournies [][]string) {
 	log.Println("Fetching tournament data...")
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
 
 	listLen := len(portlandTournies)
 	page := 1
@@ -33,10 +28,7 @@ func GetPDXTournies() (portlandTournies [][]string) {
 		// Construct API URL with the tournament slug and page number
 		api := fmt.Sprintf(apiTemplate, "tournament", fmt.Sprintf("&page=%d", page), "")
 		
-		req, err := http.NewRequest("GET", api, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
+		client, req := createRequest("GET", api, nil)
 
 		resp, err := client.Do(req)
 		if err != nil {

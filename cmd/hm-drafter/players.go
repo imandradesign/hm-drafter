@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"strings"
-	"time"
 )
 
 type Players struct {
@@ -63,9 +61,6 @@ func safeString(value interface{}) string {
 // GetPlayersData uses the tournament ID to retrieve player and form field data from that specific event. Returns player count as well.
 func GetPlayersData(tournamentId string) (players []Players) {
 	log.Println("Fetching player data...")
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
 
 	page := 1
 	for {
@@ -74,15 +69,13 @@ func GetPlayersData(tournamentId string) (players []Players) {
 		// Build the API URL for the current page
 		api := fmt.Sprintf(apiTemplate, "player", fmt.Sprintf("&tournament_id=%v", tournamentId), fmt.Sprintf("&page=%d", page))
 
-		req, err := http.NewRequest("GET", api, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
+		client, req := createRequest("GET", api, nil)
 
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatal(err)
 		}
+		
 		defer resp.Body.Close()
 
 		// Parse the response into a generic map

@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
@@ -20,6 +22,8 @@ const (
 )
 
 var (
+	sessionID           string
+	cookie              *http.Cookie
 	selectedTournament  []string
 	formFields          [][]string
 	tournamentID        string
@@ -34,6 +38,38 @@ var (
 	draftDirection      int
 	teams               [][]string
 )
+
+func init() {
+    // Retrieve the session ID from the environment
+    sessionID = os.Getenv("SESSION_ID")
+    if sessionID == "" {
+        log.Fatal("Session ID not set in environment")
+    }
+
+    // Initialize the session cookie
+    cookie = &http.Cookie{
+        Name:  "sessionid",
+        Value: sessionID,
+    }
+}
+
+// Helper function to create an HTTP request with the session cookie
+func createRequest(method, url string, body io.Reader) (client *http.Client, req *http.Request) {
+	client = &http.Client{
+    	Timeout: 10 * time.Second,
+	}
+	
+    req, err := http.NewRequest(method, url, body)
+    if err != nil {
+		log.Fatal(err)
+        return nil, nil
+    }
+
+    // Attach the session cookie
+    req.AddCookie(cookie)
+
+    return client, req
+}
 
 func main() {
 	port := os.Getenv("PORT")

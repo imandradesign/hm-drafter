@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type Team struct {
@@ -22,18 +21,10 @@ type TeamApiResponse struct {
 
 func GetTeams(tournamentID string) (teams [][]string) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
+
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
-	log.Printf("API call: %v", api)
-
-	client := &http.Client{
-    	Timeout: 10 * time.Second,
-	}
-
-	req, err := http.NewRequest("GET", api, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	client, req := createRequest("GET", api, nil)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -48,8 +39,6 @@ func GetTeams(tournamentID string) (teams [][]string) {
 	if err := json.NewDecoder(resp.Body).Decode(&teamApiResponse); err != nil {
 		log.Fatal(err)
 	}
-
-	log.Printf("teamApiResponse: %v", teamApiResponse)
 
 	for _, team := range teamApiResponse.Results {
 		log.Printf("Team retrieved: %v", team.Name)
