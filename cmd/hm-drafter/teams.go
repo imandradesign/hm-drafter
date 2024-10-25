@@ -69,8 +69,14 @@ func AddTeam(teamName string, tournamentID string) error {
 
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
-	// Make the POST request to the API
-	resp, err := http.Post(api, "application/json", bytes.NewBuffer(teamJSON))
+	// Use createRequest to get the client and request with the cookie attached
+	client, req := createRequest("POST", api, bytes.NewBuffer(teamJSON))
+
+	// Set the content type header
+	req.Header.Set("Content-Type", "application/json")
+
+	// Send the request
+	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("error making POST request: %v", err)
 	}
