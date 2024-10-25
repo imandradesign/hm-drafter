@@ -22,7 +22,7 @@ type TeamApiResponse struct {
 
 func GetTeams(tournamentID string) (teams [][]string) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
-	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v&format=json", tournamentID)
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
 	log.Printf("API call: %v", api)
 
@@ -78,7 +78,7 @@ func AddTeam(teamName string, tournamentID string) error {
 		return fmt.Errorf("error marshalling team data: %v", err)
 	}
 
-	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/?tournament_id=%v&format=json", tournamentID)
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
 	// Make the POST request to the API
 	resp, err := http.Post(api, "application/json", bytes.NewBuffer(teamJSON))
