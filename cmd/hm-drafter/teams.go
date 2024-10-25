@@ -65,19 +65,17 @@ func GetTeams(tournamentID string) (teams []TeamInfo) {
 		log.Fatal(err)
 	}
 
-	// Assign each player to their team based on TeamInfo
+	// Assign each player to their team based on the "team" field
 	for _, player := range playerApiResponse.Results {
-		if player.TeamInfo != nil {
-			teamID := player.TeamInfo.ID
-			if team, found := teamMap[teamID]; found {
-				team.Players = append(team.Players, Players{ID: player.ID, Name: player.Name})
-			}
+		if team, found := teamMap[player.Team]; found {
+			team.Players = append(team.Players, player) // Directly append player to the correct team
 		}
 	}
 
-	log.Printf("TEAMS:\n%v", teams)
+	log.Printf("TEAMS with Players:\n%v", teams)
 	return teams
 }
+
 
 func AddTeam(teamName string, tournamentID string) error {
 	// Convert tournament ID to an integer

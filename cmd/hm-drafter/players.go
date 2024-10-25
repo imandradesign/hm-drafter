@@ -9,11 +9,12 @@ import (
 
 type Players struct {
 	Name       string    `json:"name"`
-	ID         float64       `json:"user"`
+	ID         float64   `json:"user"`
 	Scene      string    `json:"scene"`
 	Pronouns   string    `json:"pronouns"`
+	Team       int       `json:"team"`
 	FormFields map[string]string
-	TeamInfo *TeamInfo `json:"team_info,omitempty"`
+	TeamInfo   *TeamInfo `json:"team_info,omitempty"`
 }
 
 type PlayersApiResponse struct {
@@ -27,6 +28,7 @@ func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players
 		Scene:    safeString(data["scene"]),
 		Pronouns: safeString(data["pronouns"]),
 		ID:       data["user"].(float64),
+		Team:     data["team"].(int),
 	}
 
 	// Prepare dynamic form fields
@@ -52,7 +54,7 @@ func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players
 	}
 
 	// Assign team info if team ID exists in teamMap
-	if teamID, ok := data["team"].(float64); ok {
+	if teamID, ok := data["team"].(int); ok {
 		intTeamID := int(teamID)
 		if team, found := teamMap[intTeamID]; found {
 			player.TeamInfo = &team
