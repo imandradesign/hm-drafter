@@ -19,6 +19,7 @@ type Team struct {
 type TeamInfo struct {
 	ID   int
 	Name string
+	Players []Players `json:"players,omitempty"`
 }
 
 type TeamApiResponse struct {
@@ -28,27 +29,50 @@ type TeamApiResponse struct {
 func GetTeams(tournamentID string) (teams []TeamInfo) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 
+	// Fetch Teams
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
-
 	client, req := createRequest("GET", api, nil)
-
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// Defer the closing of the body
 	defer resp.Body.Close()
 
-	// Decode the response into APIResponse struct
 	var teamApiResponse TeamApiResponse
 	if err := json.NewDecoder(resp.Body).Decode(&teamApiResponse); err != nil {
 		log.Fatal(err)
 	}
 
+	// Initialize teamMap for faster lookup and append teams to slice
+	teamMap := make(map[int]*TeamInfo)
 	for _, team := range teamApiResponse.Results {
-		log.Printf("Team retrieved: %v", team.Name)
-		teams = append(teams, TeamInfo{ID: team.ID, Name: team.Name})
+		teamInfo := TeamInfo{ID: team.ID, Name: team.Name, Players: []Players{}}
+		teams = append(teams, teamInfo)
+		teamMap[team.ID] = &teams[len(teams)-1] // Point to the newly added team in slice
+	}
+
+	// Fetch Players and assign them to teams
+	playerApi := fmt.Sprintf("https://kqhivemind.com/api/tournament/player/?tournament_id=%v&format=json", tournamentID)
+	client, req = createRequest("GET", playerApi, nil)
+	resp, err = client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	var playerApiResponse PlayersApiResponse
+	if err := json.NewDecoder(resp.Body).Decode(&playerApiResponse); err != nil {
+		log.Fatal(err)
+	}
+
+	// Assign each player to their team based on TeamInfo
+	for _, player := range playerApiResponse.Results {
+		if player.TeamInfo != nil {
+			teamID := player.TeamInfo.ID
+			if team, found := teamMap[teamID]; found {
+				team.Players = append(team.Players, Players{ID: player.ID, Name: player.Name})
+			}
+		}
 	}
 
 	log.Printf("TEAMS:\n%v", teams)

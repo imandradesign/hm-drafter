@@ -9,6 +9,7 @@ import (
 
 type Players struct {
 	Name       string    `json:"name"`
+	ID         float64       `json:"user"`
 	Scene      string    `json:"scene"`
 	Pronouns   string    `json:"pronouns"`
 	FormFields map[string]string
@@ -20,11 +21,12 @@ type PlayersApiResponse struct {
 }
 
 func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players {
-	// Extract static fields like name, scene, pronouns, checking if they are nil first
+	// Extract static fields like name, scene, pronouns, and ID
 	player := Players{
 		Name:     safeString(data["name"]),
 		Scene:    safeString(data["scene"]),
 		Pronouns: safeString(data["pronouns"]),
+		ID:       data["user"].(float64),
 	}
 
 	// Prepare dynamic form fields
@@ -32,7 +34,7 @@ func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players
 	for _, field := range formFields {
 		fieldName := field[0] // e.g., "question216"
 		if value, ok := data[fieldName]; ok {
-			// Handle the different types the value could have
+			// Handle different types the value could have
 			switch v := value.(type) {
 			case string:
 				player.FormFields[field[1]] = v // field[1] is the slug like "discord"
@@ -50,13 +52,13 @@ func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players
 	}
 
 	// Assign team info if team ID exists in teamMap
-    if teamID, ok := data["team"].(float64); ok {
-        intTeamID := int(teamID)
-        if team, found := teamMap[intTeamID]; found {
-            player.TeamInfo = &team
-        }
-    }
-	
+	if teamID, ok := data["team"].(float64); ok {
+		intTeamID := int(teamID)
+		if team, found := teamMap[intTeamID]; found {
+			player.TeamInfo = &team
+		}
+	}
+
 	return player
 }
 
