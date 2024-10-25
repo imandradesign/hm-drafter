@@ -195,6 +195,7 @@ func main() {
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
 			"currentCaptain": draftOrder[currentCaptainIndex].Name,
+			"teams": teams,
 		})
 	})
 

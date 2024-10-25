@@ -19,7 +19,18 @@
             </ol>
 
             <div id="curr-captain">
-                <h1>Your Turn: {{.currentCaptain}}</h1>
+                <h1><strong>Your Turn: {{.currentCaptain}}</strong></h1>
+            </div>
+            <div id="existing-teams">
+                <h3>Existing Teams</h3>
+                {{range .teams}}
+                <div>{{.Name}}</div>
+                <ul>
+                    {{range .Players}}
+                    <li>{{.Name}}</li>
+                    {{end}}
+                </ul>
+                {{end}}
             </div>
         </div>
 
