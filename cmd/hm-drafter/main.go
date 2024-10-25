@@ -115,8 +115,6 @@ func main() {
 		draftOrder = CaptainDraftOrder(captains)
 		currentCaptainIndex = 0 // Start with the first captain
 		draftDirection = 1      // Start with ascending order
-
-		c.Redirect(http.StatusFound, "/")
 	})
 
 	// Handle the POST request for adding a team
@@ -137,9 +135,6 @@ func main() {
 			c.String(http.StatusInternalServerError, fmt.Sprintf("Error adding team: %v", err))
 			return
 		}
-
-		// Success, redirect back to the team creation section
-		c.Redirect(http.StatusFound, "/")
 	})
 
 	// Drafting page route (accessible at /drafting)
