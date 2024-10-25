@@ -11,14 +11,14 @@ import (
 )
 
 type Team struct {
-	ID int `json:"id"`
-	Name string `json:"name"`
-	Tournament int `json:"tournament"`
+	ID         int    `json:"id"`
+	Name       string `json:"name"`
+	Tournament int    `json:"tournament"`
 }
 
 type TeamInfo struct {
-	ID   int
-	Name string
+	ID      int
+	Name    string
 	Players []Players `json:"players,omitempty"`
 }
 
@@ -26,10 +26,10 @@ type TeamApiResponse struct {
 	Results []Team `json:"results"`
 }
 
-func GetTeams(tournamentID string) (teams []TeamInfo) {
+func GetTeams(tournamentID string, players []Players) (teams []TeamInfo) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 
-	// Fetch Teams
+	// Fetch Teams from the API
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 	client, req := createRequest("GET", api, nil)
 	resp, err := client.Do(req)
@@ -43,32 +43,18 @@ func GetTeams(tournamentID string) (teams []TeamInfo) {
 		log.Fatal(err)
 	}
 
-	// Initialize teamMap for faster lookup and append teams to slice
+	// Create a map of team IDs to TeamInfo pointers for quick access
 	teamMap := make(map[int]*TeamInfo)
 	for _, team := range teamApiResponse.Results {
 		teamInfo := TeamInfo{ID: team.ID, Name: team.Name, Players: []Players{}}
 		teams = append(teams, teamInfo)
-		teamMap[team.ID] = &teams[len(teams)-1] // Point to the newly added team in slice
+		teamMap[team.ID] = &teams[len(teams)-1] // Map each TeamInfo by its ID
 	}
 
-	// Fetch Players and assign them to teams
-	playerApi := fmt.Sprintf("https://kqhivemind.com/api/tournament/player/?tournament_id=%v&format=json", tournamentID)
-	client, req = createRequest("GET", playerApi, nil)
-	resp, err = client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-
-	var playerApiResponse PlayersApiResponse
-	if err := json.NewDecoder(resp.Body).Decode(&playerApiResponse); err != nil {
-		log.Fatal(err)
-	}
-
-	// Assign each player to their team based on the "team" field
-	for _, player := range playerApiResponse.Results {
+	// Iterate over players and add them to the matching team in teamMap
+	for _, player := range players {
 		if team, found := teamMap[player.Team]; found {
-			team.Players = append(team.Players, player) // Directly append player to the correct team
+			team.Players = append(team.Players, player)
 		}
 	}
 

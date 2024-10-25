@@ -8,56 +8,45 @@ import (
 )
 
 type Players struct {
-	Name       string    `json:"name"`
-	ID         float64   `json:"user"`
-	Scene      string    `json:"scene"`
-	Pronouns   string    `json:"pronouns"`
-	Team       int       `json:"team"`
-	FormFields map[string]string
-	TeamInfo   *TeamInfo `json:"team_info,omitempty"`
+	Name       string            `json:"name"`
+	ID         float64           `json:"user"`
+	Scene      string            `json:"scene"`
+	Pronouns   string            `json:"pronouns"`
+	Team       int               `json:"team"`
+	FormFields map[string]string `json:"form_fields,omitempty"`
 }
 
 type PlayersApiResponse struct {
 	Results []Players `json:"results"`
 }
 
-func ParsePlayers(data map[string]interface{}, teamMap map[int]TeamInfo) Players {
+func ParsePlayers(data map[string]interface{}) Players {
 	// Extract static fields like name, scene, pronouns, and ID
 	player := Players{
-		Name:     safeString(data["name"]),
-		Scene:    safeString(data["scene"]),
-		Pronouns: safeString(data["pronouns"]),
-		ID:       data["user"].(float64),
-		Team:     data["team"].(int),
+		Name:       safeString(data["name"]),
+		Scene:      safeString(data["scene"]),
+		Pronouns:   safeString(data["pronouns"]),
+		ID:         data["user"].(float64),
+		Team:       int(data["team"].(float64)),
+		FormFields: make(map[string]string),
 	}
 
-	// Prepare dynamic form fields
-	player.FormFields = make(map[string]string)
+	// Process dynamic form fields if they exist
 	for _, field := range formFields {
-		fieldName := field[0] // e.g., "question216"
+		fieldName := field[0]
 		if value, ok := data[fieldName]; ok {
-			// Handle different types the value could have
 			switch v := value.(type) {
 			case string:
-				player.FormFields[field[1]] = v // field[1] is the slug like "discord"
+				player.FormFields[field[1]] = v
 			case []interface{}:
-				// Convert array to a string representation (comma-separated)
 				var strValues []string
 				for _, item := range v {
 					strValues = append(strValues, fmt.Sprintf("%v", item))
 				}
-				player.FormFields[field[1]] = strings.Join(strValues, ", ") // Join without brackets
+				player.FormFields[field[1]] = strings.Join(strValues, ", ")
 			default:
 				player.FormFields[field[1]] = fmt.Sprintf("%v", value)
 			}
-		}
-	}
-
-	// Assign team info if team ID exists in teamMap
-	if teamID, ok := data["team"].(int); ok {
-		intTeamID := int(teamID)
-		if team, found := teamMap[intTeamID]; found {
-			player.TeamInfo = &team
 		}
 	}
 
@@ -72,21 +61,14 @@ func safeString(value interface{}) string {
 	return fmt.Sprintf("%v", value)
 }
 
-// GetPlayersData uses the tournament ID to retrieve player and form field data from that specific event. Returns player count as well.
-func GetPlayersData(tournamentId string) (players []Players) {
+// GetPlayersData retrieves all player data for the specified tournament ID, returning a slice of Players
+func GetPlayersData(tournamentID string) (players []Players) {
 	log.Println("Fetching player data...")
-
-	// Fetch teams for the tournament
-    teams := GetTeams(tournamentId)
-    teamMap := make(map[int]TeamInfo)
-    for _, team := range teams {
-        teamMap[team.ID] = team
-    }
 
 	page := 1
 	for {
 		// Build the API URL for the current page
-		api := fmt.Sprintf(apiTemplate, "player", fmt.Sprintf("&tournament_id=%v", tournamentId), fmt.Sprintf("&page=%d", page))
+		api := fmt.Sprintf(apiTemplate, "player", fmt.Sprintf("&tournament_id=%v", tournamentID), fmt.Sprintf("&page=%d", page))
 		client, req := createRequest("GET", api, nil)
 		resp, err := client.Do(req)
 		if err != nil {
@@ -94,36 +76,26 @@ func GetPlayersData(tournamentId string) (players []Players) {
 		}
 		defer resp.Body.Close()
 
-		// Parse the response into a generic map
-		var rawResponse map[string]interface{}
-		err = json.NewDecoder(resp.Body).Decode(&rawResponse)
+		// Parse the response into a PlayersApiResponse
+		var playerApiResponse PlayersApiResponse
+		err = json.NewDecoder(resp.Body).Decode(&playerApiResponse)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// Check if the results array is empty
-		results, ok := rawResponse["results"].([]interface{})
-		if !ok || len(results) == 0 {
-			log.Println("No players found.")
-			break
-		}
-
-		// Parse each player
-		for _, playerData := range results {
-			player := ParsePlayers(playerData.(map[string]interface{}), teamMap)
-			players = append(players, player)
-		}
-
-		// Check if there is a next page
-		if nextURL, ok := rawResponse["next"].(string); ok && nextURL != "" {
-			page++
-		} else {
+		// If no results are returned, exit the loop
+		if len(playerApiResponse.Results) == 0 {
 			log.Println("No more pages.")
 			break
 		}
+
+		// Add the current page's players to the slice
+		players = append(players, playerApiResponse.Results...)
+
+		// Increment the page for the next iteration
+		page++
 	}
 
-	log.Printf("PLAYERS: \n%v", players)
-	log.Println("API data fetched.")
+	log.Printf("API data fetched.\nPLAYERS:\n%v", players)
 	return players
 }
