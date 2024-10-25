@@ -45,7 +45,7 @@ func main() {
 	router.Use(gin.Logger())
 
 	// Load HTML templates
-	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html")
+	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html", "templates/teams.html")
 
 	router.Static("/static", "./static")
 
