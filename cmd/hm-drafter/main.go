@@ -204,14 +204,18 @@ func main() {
 
 		AddPlayerToDraftTeam(tournamentID, teams, currCaptain,selectedPlayer)
 
+		// Get updated teams list
+		teams = GetTeams(tournamentID, players)
+
 		// Remove the selected player from the list
 		draftPlayers = RemoveDraftedPlayers(draftPlayers, selectedPlayer)
 
+		if len(draftPlayers) == 0 {
+			c.Redirect(http.StatusFound, "/done")
+		}
+
 		// Advance the draft turn
 		advanceDraftTurn(draftOrder)
-
-		// Get updated teams list
-		teams = GetTeams(tournamentID, players)
 
 		// Re-render the drafting page with the updated current captain
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
@@ -231,7 +235,6 @@ func main() {
 			"teams": teams,
 		})
 	})
-
 
 	err := router.Run(":" + port)
 	if err != nil {
