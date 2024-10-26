@@ -12,33 +12,25 @@
     <div class="header-container">
         <!-- Top row with equal-width boxes -->
         <div class="top-row">
-            <div class="box snake-draft">
-                <h2>Snake Draft Order</h2>
-                <ol>
-                    {{range .draftOrder}}
-                    <li>{{.Name}}</li>
-                    {{end}}
-                </ol>
-            </div>
-
             <div class="box existing-teams">
                 <h2>Existing Teams</h2>
                 {{range .teams}}
-                <div>{{.Name}}</div>
+                <div>{{.Name}} ({{index .FormFields "name"}})</div>
                 <ul>
                     {{range .Players}}
-                    <li>{{.Name}}</li>
+                    <li>{{.Name}} ({{index .FormFields "name"}})</li>
                     {{end}}
                 </ul>
                 {{end}}
             </div>
 
-            <div class="box selected-tournament">
-                <h2>Selected Tournament</h2>
-                <p><strong>Name:</strong> {{index .selectedTournament 1}}</p>
-                <p><strong>Date:</strong> {{index .selectedTournament 2}}</p>
-                <p><strong>Captain Count:</strong> {{.captainCount}}</p>
-                <p><strong>Remaining Player Count:</strong> {{.remaininPlayerCount}}</p>
+            <div class="box snake-draft">
+                <h2>Snake Draft Order</h2>
+                <ol>
+                    {{range .draftOrder}}
+                    <li>{{.Name}} ({{index .FormFields "name"}})</li>
+                    {{end}}
+                </ol>
             </div>
         </div>
 

@@ -22,10 +22,10 @@
             <div id="existing-teams">
                 <h3>Existing Teams</h3>
                 {{range .teams}}
-                <div>{{.Name}}</div>
+                <div>{{.Name}} ({{index .FormFields "name"}})</div>
                 <ul>
                     {{range .Players}}
-                    <li>{{.Name}}</li>
+                    <li>{{.Name}} ({{index .FormFields "name"}})</li>
                     {{end}}
                 </ul>
                 {{end}}
