@@ -10,19 +10,19 @@
 
 <body>
     <div class="header-container">
-        <div class="draft-order">
-            <h2>Snake Draft Order</h2>
-            <ol>
-                {{range .draftOrder}}
-                <li>{{.Name}}</li>
-                {{end}}
-            </ol>
-
-            <div id="curr-captain">
-                <h1><strong>Your Turn: {{.currentCaptain}}</strong></h1>
+        <!-- Top row with equal-width boxes -->
+        <div class="top-row">
+            <div class="box snake-draft">
+                <h2>Snake Draft Order</h2>
+                <ol>
+                    {{range .draftOrder}}
+                    <li>{{.Name}}</li>
+                    {{end}}
+                </ol>
             </div>
-            <div id="existing-teams">
-                <h3>Existing Teams</h3>
+
+            <div class="box existing-teams">
+                <h2>Existing Teams</h2>
                 {{range .teams}}
                 <div>{{.Name}}</div>
                 <ul>
@@ -32,18 +32,23 @@
                 </ul>
                 {{end}}
             </div>
+
+            <div class="box selected-tournament">
+                <h2>Selected Tournament</h2>
+                <p><strong>Name:</strong> {{index .selectedTournament 1}}</p>
+                <p><strong>Date:</strong> {{index .selectedTournament 2}}</p>
+                <p><strong>Captain Count:</strong> {{.captainCount}}</p>
+                <p><strong>Remaining Player Count:</strong> {{.remaininPlayerCount}}</p>
+            </div>
         </div>
 
-        <div class="selected-tournament-box">
-            <h2>Selected Tournament</h2>
-            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
-            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
-            <br>
-            <p><strong>Captain Count: </strong>{{.captainCount}}</p>
-            <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
+        <!-- Second row: Current captain info -->
+        <div id="curr-captain">
+            <h1><strong>Your Turn: {{.currentCaptain}}</strong></h1>
         </div>
     </div>
 
+    <!-- Third row: Player selection -->
     <h2>Players List</h2>
     <form method="POST" action="/pick-player">
         <div class="players-grid">
@@ -59,14 +64,13 @@
             </label>
             {{end}}
         </div>
-        <br><br>
         <button type="submit" class="confirm-btn">Claim Player</button>
     </form>
 
     <script>
         function toggleRadio(radioId) {
             var radio = document.getElementById(radioId);
-            radio.checked = true; // Ensure the radio is selected when clicked
+            radio.checked = true;
         }
     </script>
 </body>

@@ -12,15 +12,25 @@ body {
     padding: 20px;
 }
 
+.top-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-row .box {
+    width: 32%;
+    /* Ensure the three boxes take equal space */
+}
+
 .draft-order {
     flex-grow: 1;
     margin-right: 20px;
     width: 250px;
 }
 
-.selected-tournament-box {
+.selected-tournament-box,#curr-captain {
     background-color: #DDC5C5;
-    border: 1px solid #F6F0F0;
+    border: 1px solid #C9A5A5;
     border-radius: 8px;
     padding: 16px;
     width: 250px;
@@ -40,7 +50,7 @@ body {
 }
 
 .player-card {
-    border: 1px solid #F6F0F0;
+    border: 1px solid #C9A5A5;
     border-radius: 8px;
     padding: 16px;
     position: relative;
@@ -92,6 +102,10 @@ input[type="checkbox"] {
 #team-message {
     color: green;
     margin-top: 10px;
+}
+
+#curr-captain {
+    text-align: center;
 }
 
 /* iPad specific optimizations */
