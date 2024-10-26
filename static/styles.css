@@ -19,8 +19,8 @@ body {
 }
 
 .selected-tournament-box {
-    background-color: #e0f7fa;
-    border: 1px solid #ccc;
+    background-color: #DDC5C5;
+    border: 1px solid #F6F0F0;
     border-radius: 8px;
     padding: 16px;
     width: 250px;
@@ -40,17 +40,17 @@ body {
 }
 
 .player-card {
-    border: 1px solid #ccc;
+    border: 1px solid #F6F0F0;
     border-radius: 8px;
     padding: 16px;
     position: relative;
     cursor: pointer;
-    background-color: #f9f9f9;
+    background-color: #DDC5C5;
     transition: background-color 0.3s ease;
 }
 
 .player-card:hover {
-    background-color: #e0f7fa;
+    background-color: #E4D1D1;
 }
 
 .player-card h3 {
@@ -62,7 +62,7 @@ body {
 }
 
 .confirm-btn {
-    background-color: #e0f7fa;
+    background-color: #F6F0F0;
     font-size: 20px;
     border: none;
     padding: 10px 20px;
@@ -72,7 +72,7 @@ body {
 }
 
 .confirm-btn:hover {
-    background-color: #b2ebf2;
+    background-color: #F1E7E7;
 }
 
 .radio-btn,
