@@ -210,7 +210,10 @@ func main() {
 		// Remove the selected player from the list
 		draftPlayers = RemoveDraftedPlayers(draftPlayers, selectedPlayer)
 
-		log.Printf("# of draft players remaining: %v", len(draftPlayers))
+		if len(draftPlayers) == 0 {
+			c.Redirect(http.StatusFound, "/done")
+			return
+		}
 
 		// Advance the draft turn
 		advanceDraftTurn(draftOrder)
@@ -225,11 +228,6 @@ func main() {
 			"currentCaptain": currCaptain,
 			"teams": teams,
 		})
-
-		if len(draftPlayers) == 0 {
-			log.Println("It should supposedly redirect now.")
-			c.Redirect(http.StatusFound, "/done")
-		}
 	})
 
 	router.GET("/done", func(c *gin.Context) {
