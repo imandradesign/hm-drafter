@@ -1,5 +1,14 @@
 package main
 
+import (
+	"fmt"
+	"log"
+)
+
+type UpdatePlayerTeamRequest struct {
+    Team int `json:"team"`
+}
+
 func advanceDraftTurn(draftOrder []CaptainDraft) {
 	// Move to the next captain
 	currentCaptainIndex += draftDirection
@@ -22,4 +31,17 @@ func RemoveDraftedPlayers(draftPlayers []Players, selectedPlayer string) (update
 	}
 
 	return updatedDraftPlayers
+}
+
+func AddPlayerToDraftTeam(tournamentID string, teams []TeamInfo, captain string, draftedPlayer string) {
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/player/?tournament_id=%v&format=json", tournamentID)
+
+	client, req := createRequest("PATCH", api, nil)
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+
+	
 }

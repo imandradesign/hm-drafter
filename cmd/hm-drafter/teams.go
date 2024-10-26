@@ -63,7 +63,7 @@ func GetTeams(tournamentID string, players []Players) (teams []TeamInfo) {
 }
 
 
-func AddTeam(teamName string, tournamentID string) error {
+func AddNewTeam(teamName string, tournamentID string) {
 	// Convert tournament ID to an integer
 	tournamentIDInt, err := strconv.Atoi(tournamentID)
 	if err != nil {
@@ -79,7 +79,7 @@ func AddTeam(teamName string, tournamentID string) error {
 	// Convert the team struct to JSON
 	teamJSON, err := json.Marshal(newTeam)
 	if err != nil {
-		return fmt.Errorf("error marshalling team data: %v", err)
+		log.Fatalf("error marshalling team data: %v", err)
 	}
 
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
@@ -98,17 +98,15 @@ func AddTeam(teamName string, tournamentID string) error {
 	// Make the POST request
 	resp, err := client.Do(req)
 	if err != nil {
-		return fmt.Errorf("error making POST request: %v", err)
+		log.Fatalf("error making POST request: %v", err)
 	}
 	defer resp.Body.Close()
 
 	// Check the response status code
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("Failed to add team. Status: %v, Response: %s", resp.Status, string(body))
+		log.Fatalf("Failed to add team. Status: %v, Response: %s", resp.Status, string(body))
 	}
 
 	log.Printf("Request to add team returned status: %v", resp.Status)
-
-	return nil
 }

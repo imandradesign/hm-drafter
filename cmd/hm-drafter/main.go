@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -80,7 +79,7 @@ func main() {
 	router.Use(gin.Logger())
 
 	// Load HTML templates
-	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html", "templates/teams.html")
+	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html", "templates/teams.html", "templates/done.html")
 
 	router.Static("/static", "./static")
 
@@ -172,11 +171,7 @@ func main() {
 		teamName := c.PostForm("teamName")
 
 		// Call the function to add the team
-		err := AddTeam(teamName, tournamentID)
-		if err != nil {
-			c.String(http.StatusInternalServerError, fmt.Sprintf("Error adding team: %v", err))
-			return
-		}
+		AddNewTeam(teamName, tournamentID)
 
 		// Success, redirect back to the team creation section
 		c.Redirect(http.StatusFound, "/teams")
@@ -189,6 +184,7 @@ func main() {
 	// Drafting page route (accessible at /drafting)
 	router.GET("/drafting", func(c *gin.Context) {
 		teams = GetTeams(tournamentID, players)
+		currCaptain := draftOrder[currentCaptainIndex].Name
 
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
@@ -196,14 +192,17 @@ func main() {
 			"remaininPlayerCount": remaininPlayerCount,
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
-			"currentCaptain": draftOrder[currentCaptainIndex].Name,
+			"currentCaptain": currCaptain,
 			"teams": teams,
 		})
 	})
 
 	// Handle the player selection and advance the draft turn
 	router.POST("/pick-player", func(c *gin.Context) {
+		currCaptain := draftOrder[currentCaptainIndex].Name
 		selectedPlayer := c.PostForm("selectedPlayer")
+
+		AddPlayerToDraftTeam(tournamentID, teams, currCaptain,selectedPlayer)
 
 		// Remove the selected player from the list
 		draftPlayers = RemoveDraftedPlayers(draftPlayers, selectedPlayer)
@@ -221,7 +220,14 @@ func main() {
 			"remaininPlayerCount": remaininPlayerCount,
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
-			"currentCaptain": draftOrder[currentCaptainIndex].Name,
+			"currentCaptain": currCaptain,
+			"teams": teams,
+		})
+	})
+
+	router.GET("/done", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "done.html", gin.H{
+			"selectedTournament": selectedTournament,
 			"teams": teams,
 		})
 	})

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portland Mixer Drafting - Draft Complete!</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="header-container">
+        <div id="teams">
+            <h3>Teams</h3>
+            {{range .teams}}
+            <div>{{.Name}}</div>
+            <ul>
+                {{range .Players}}
+                <li>{{.Name}}</li>
+                {{end}}
+            </ul>
+            {{end}}
+        </div>
+
+        <div class="selected-tournament-box">
+            <h2>Selected Tournament</h2>
+            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
+            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+        </div>
+    </div>
+</body>
+
+</html>
