@@ -13,6 +13,7 @@ type Players struct {
 	Scene      string            `json:"scene"`
 	Pronouns   string            `json:"pronouns"`
 	Team       int               `json:"team"`
+	Image      string            `json:"image"`
 	FormFields map[string]string `json:"form_fields,omitempty"`
 }
 
@@ -26,6 +27,7 @@ func ParsePlayers(data map[string]interface{}) Players {
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
 		Pronouns:   safeString(data["pronouns"]),
+		Image:      safeString(data["image"]),
 		FormFields: make(map[string]string),
 	}
 
