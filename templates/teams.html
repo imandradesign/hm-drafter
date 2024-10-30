@@ -23,13 +23,15 @@
                 <h3>Existing Teams</h3>
                 {{range .teams}}
                 <ol>
-                    <li>{{.Name}}</li>
-                    <ul>
-                        {{range .Players}}
-                        <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
-                        {{end}}
-                    </ul>
-                </ol>>
+                    <li>
+                        {{.Name}}
+                        <ul>
+                            {{range .Players}}
+                            <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
+                            {{end}}
+                        </ul>
+                    </li>
+                </ol>
                 {{end}}
             </div>
         </div>
