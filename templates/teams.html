@@ -56,11 +56,11 @@
         <h2>Remove Teams</h2>
         <form id="teamRemovalForm" method="POST" action="/remove-team">
             <label for="teams">Select a team:</label>
-            <select id="teams" name="teams">
-                {{range $index, $team := .teams}}
-                <option value="{{$index}}">Name: {{index $team 2}}, ID: {{index $team 1}}</option>
+            <select id="teams" name="teamID" required>
+                {{range .teams}}
+                <option value="{{.ID}}">Name: {{.Name}}, ID: {{.ID}}</option>
                 {{else}}
-                <option>No teams available</option>
+                <option value="">No teams available</option>
                 {{end}}
             </select>
             <br><br>
