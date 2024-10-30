@@ -121,7 +121,7 @@ func main() {
 		c.Redirect(http.StatusFound, "/")
 	})
 
-	// Handle the captain confirmation POST request
+	// Handle the form submission for captain selection
 	router.POST("/confirm-captains", func(c *gin.Context) {
 		// Get the selected captains from the form
 		captains = c.PostFormArray("selectedPlayers")
@@ -145,6 +145,7 @@ func main() {
 		c.Redirect(http.StatusFound, "/teams")
 	})
 
+	// Teams page route
 	router.GET("/teams", func(c *gin.Context) {
 		teams = GetTeams(tournamentID, players)
 
@@ -158,32 +159,34 @@ func main() {
 		})
 	})
 
-	// Handle the POST request for adding a team
+	// Handle the form submission for adding new teams
 	router.POST("/add-team", func(c *gin.Context) {
 		teamName := c.PostForm("teamName")
 
-		// Call the function to add the team
 		AddNewTeam(teamName, tournamentID)
 
-		// Success, redirect back to the team creation section
 		c.Redirect(http.StatusFound, "/teams")
 	})
 
+	// Handle the form submission for deleting teams
 	router.POST("/remove-team", func(c *gin.Context) {
 		teamID := c.PostForm("team")
+		log.Printf("Team ID for removal: %v", teamID)
 
 		teamName := GetTeamNameByID(teams, teamID)
+		log.Printf("Team name for removal: %v", teamName)
 
 		DeleteTeam(teamID, teamName, tournamentID)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})
 
+	// Redirect to Drafting page after confirming teams
 	router.POST("/confirm-teams",func(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/drafting")
 	})
 
-	// Drafting page route (accessible at /drafting)
+	// Drafting page route
 	router.GET("/drafting", func(c *gin.Context) {
 		teams = GetTeams(tournamentID, players)
 		currCaptain := draftOrder[currentCaptainIndex].Name
@@ -199,7 +202,7 @@ func main() {
 		})
 	})
 
-	// Handle the player selection and advance the draft turn
+	// Handle the form submission for player selection & advance the draft turn
 	router.POST("/pick-player", func(c *gin.Context) {
 		currCaptain := draftOrder[currentCaptainIndex].Name
 		selectedPlayer := c.PostForm("selectedPlayer")
@@ -232,6 +235,7 @@ func main() {
 		})
 	})
 
+	// Final page route
 	router.GET("/done", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "done.html", gin.H{
 			"selectedTournament": selectedTournament,
