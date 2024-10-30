@@ -15,10 +15,10 @@
             <div class="box existing-teams">
                 <h2>Existing Teams</h2>
                 {{range .teams}}
-                <div>{{.Name}} ({{index .FormFields "name"}})</div>
+                <div>{{.Name}} ({{index .FormFields "altname"}})</div>
                 <ul>
                     {{range .Players}}
-                    <li>{{.Name}} ({{index .FormFields "name"}})</li>
+                    <li>{{.Name}} ({{index .FormFields "altname"}})</li>
                     {{end}}
                 </ul>
                 {{end}}
@@ -28,7 +28,7 @@
                 <h2>Snake Draft Order</h2>
                 <ol>
                     {{range .draftOrder}}
-                    <li>{{.Name}} ({{index .FormFields "name"}})</li>
+                    <li>{{.Name}} ({{index .FormFields "altname"}})</li>
                     {{end}}
                 </ol>
             </div>

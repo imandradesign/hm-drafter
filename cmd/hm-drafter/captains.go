@@ -8,6 +8,7 @@ import (
 
 type CaptainDraft struct {
 	Name  string
+	AltName string
 	Order int
 }
 
