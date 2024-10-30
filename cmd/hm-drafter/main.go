@@ -170,7 +170,7 @@ func main() {
 
 	// Handle the form submission for deleting teams
 	router.POST("/remove-team", func(c *gin.Context) {
-		teamID := c.PostForm("team")
+		teamID := c.PostForm("teamID")
 		log.Printf("Team ID for removal: %v", teamID)
 
 		teamName := GetTeamNameByID(teams, teamID)
