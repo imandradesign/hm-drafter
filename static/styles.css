@@ -108,6 +108,10 @@ input[type="checkbox"] {
     text-align: center;
 }
 
+#team-ol>li {
+    margin-bottom: 10px;
+}
+
 /* iPad specific optimizations */
 @media only screen and (max-width: 1024px) {
     .players-grid {
