@@ -145,3 +145,17 @@ func DeleteTeam(teamID string, teamName string, tournamentID string) {
 
 	log.Printf("Request to delete team ID %d returned status: %v", teamIDInt, resp.Status)
 }
+
+func GetTeamNameByID(teams []TeamInfo, teamID string) string {
+	teamIDInt, err := strconv.Atoi(teamID)
+	if err != nil {
+		log.Printf("Can't convert team ID (%v) str to int", teamID)
+	}
+
+    for _, team := range teams {
+        if team.ID == teamIDInt {
+            return team.Name
+        }
+    }
+    return ""
+}

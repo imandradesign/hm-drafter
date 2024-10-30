@@ -58,7 +58,7 @@
             <label for="teams">Select a team:</label>
             <select id="teams" name="teamID" required>
                 {{range .teams}}
-                <option value="{{.ID}}">Name: {{.Name}}, ID: {{.ID}}</option>
+                <option value="{{.ID}}">{{.Name}}</option>
                 {{else}}
                 <option value="">No teams available</option>
                 {{end}}
