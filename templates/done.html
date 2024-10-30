@@ -13,10 +13,10 @@
         <div id="teams">
             <h1>Teams</h1>
             {{range .teams}}
-            <div>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</div>
+            <div>{{.Name}}</div>
             <ul>
                 {{range .Players}}
-                <li>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</li>
+                <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
                 {{end}}
             </ul>
             {{end}}
