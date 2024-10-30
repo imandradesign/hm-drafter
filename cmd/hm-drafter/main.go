@@ -21,8 +21,6 @@ const (
 )
 
 var (
-	sessionID           string
-	cookie              *http.Cookie
 	selectedTournament  []string
 	formFields          [][]string
 	tournamentID        string
@@ -38,22 +36,28 @@ var (
 	teams               []TeamInfo
 )
 
-// Helper function to create an HTTP request with the session cookie
+// Helper function to create an HTTP request with the API key
 func createRequest(method, url string, body io.Reader) (client *http.Client, req *http.Request) {
 	client = &http.Client{
-    	Timeout: 10 * time.Second,
+		Timeout: 10 * time.Second,
 	}
 	
-    req, err := http.NewRequest(method, url, body)
-    if err != nil {
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
 		log.Fatal(err)
-        return nil, nil
-    }
+		return nil, nil
+	}
 
-    // Attach the session cookie
-    req.AddCookie(cookie)
+	// Retrieve the API key from the environment
+	apiKey := os.Getenv("API_KEY")
+	if apiKey == "" {
+		log.Fatal("API key not set in environment")
+	}
 
-    return client, req
+	// Attach the Authorization header
+	req.Header.Add("Authorization", "Token "+apiKey)
+
+	return client, req
 }
 
 func main() {
@@ -62,18 +66,6 @@ func main() {
 	if port == "" {
 		port = "8000" // Default
 	}
-
-	// Retrieve the session ID from the environment
-    sessionID = os.Getenv("SESSION_ID")
-    if sessionID == "" {
-        log.Fatal("Session ID not set in environment")
-    }
-
-    // Initialize the session cookie
-    cookie = &http.Cookie{
-        Name:  "sessionid",
-        Value: sessionID,
-    }
 
 	router := gin.New()
 	router.Use(gin.Logger())
