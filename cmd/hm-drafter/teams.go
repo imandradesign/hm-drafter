@@ -104,7 +104,7 @@ func AddNewTeam(teamName string, tournamentID string) {
 }
 
 
-func DeleteTeam(teamID string, tournamentID string) {
+func DeleteTeam(teamID string, teamName string, tournamentID string) {
 	// Convert team ID to an integer
 	teamIDInt, err := strconv.Atoi(teamID)
 	if err != nil {
@@ -112,10 +112,10 @@ func DeleteTeam(teamID string, tournamentID string) {
 		return
 	}
 
-	// Create a payload that matches the API's requirements for deletion
+	// Create a payload that matches the API's requirements
 	deletePayload := map[string]interface{}{
-		"id":       teamIDInt,
-		"action":   "delete", // Adjust this based on the API's expected fields for deletion
+		"id":         teamIDInt,
+		"name":       teamName,
 		"tournament": tournamentID,
 	}
 
@@ -125,7 +125,7 @@ func DeleteTeam(teamID string, tournamentID string) {
 		log.Fatalf("error marshalling team delete data: %v", err)
 	}
 
-	// Use POST method for the delete request
+	// Use POST method for deletion
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 	client, req := createRequest("POST", api, bytes.NewBuffer(deleteJSON))
 	req.Header.Set("Content-Type", "application/json")

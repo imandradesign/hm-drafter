@@ -170,9 +170,11 @@ func main() {
 	})
 
 	router.POST("/remove-team", func(c *gin.Context) {
-		teamID := c.PostForm("teamID")
+		teamToRemove := c.PostForm("team")
 
-		DeleteTeam(teamID, tournamentID)
+		log.Printf("Team To Remove: %v", teamToRemove)
+
+		// DeleteTeam(teamID, teamName, tournamentID)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})

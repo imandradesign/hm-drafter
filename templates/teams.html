@@ -36,15 +36,6 @@
             </div>
         </div>
 
-        <div id="team-deletion-section">
-            <h2>Remove Teams</h2>
-            <form id="teamRemovalForm" method="POST" action="/remove-team">
-                <label for="teamID">Enter Team ID:</label>
-                <input type="text" id="teamID" name="teamID" placeholder="Team ID" required>
-                <button type="submit">Delete Team</button>
-            </form>
-        </div>
-
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
@@ -59,6 +50,22 @@
                 {{end}}
             </ul>
         </div>
+    </div>
+
+    <div id="team-deletion-section">
+        <h2>Remove Teams</h2>
+        <form id="teamRemovalForm" method="POST" action="/remove-team">
+            <label for="teams">Select a team:</label>
+            <select id="teams" name="teams">
+                {{range $index, $team := .teams}}
+                <option value="{{$index}}">Name: {{index $team 2}}, ID: {{index $team 1}}</option>
+                {{else}}
+                <option>No teams available</option>
+                {{end}}
+            </select>
+            <br><br>
+            <button type="submit" class="confirm-btn">Delete Team</button>
+        </form>
     </div>
 
     <div>
