@@ -28,8 +28,8 @@ body {
 }
 
 .selected-tournament-box,#curr-captain,.box {
-    background-color: #DDC5C5;
-    border: 1px solid #C9A5A5;
+    background-color: #C9A5A5;
+    border: 1px solid #3A3B3C;
     border-radius: 8px;
     padding: 16px;
     width: 250px;
@@ -49,12 +49,12 @@ body {
 }
 
 .player-card {
-    border: 1px solid #C9A5A5;
+    border: 1px solid #3A3B3C;
     border-radius: 8px;
     padding: 16px;
     position: relative;
     cursor: pointer;
-    background-color: #DDC5C5;
+    background-color: #C9A5A5;
     transition: background-color 0.3s ease;
 }
 
@@ -77,6 +77,7 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 8px;
+    border: 1px solid #3A3B3C;
     transition: background-color 0.3s ease;
 }
 
