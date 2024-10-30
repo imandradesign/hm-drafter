@@ -105,32 +105,13 @@ func AddNewTeam(teamName string, tournamentID string) {
 
 
 func DeleteTeam(teamID string, teamName string, tournamentID string) {
-	// Convert team ID to an integer
-	teamIDInt, err := strconv.Atoi(teamID)
-	if err != nil {
-		log.Print("Unable to convert team ID string to int in DeleteTeam() func.")
-		return
-	}
+	// Construct the API URL with the team ID directly in the endpoint
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/%s/?tournament_id=%v", teamID, tournamentID)
 
-	// Create a payload that matches the API's requirements
-	deletePayload := map[string]interface{}{
-		"id":         teamIDInt,
-		"name":       teamName,
-		"tournament": tournamentID,
-	}
-
-	// Convert the payload to JSON
-	deleteJSON, err := json.Marshal(deletePayload)
-	if err != nil {
-		log.Fatalf("error marshalling team delete data: %v", err)
-	}
-
-	// Use POST method for deletion
-	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
-	client, req := createRequest("POST", api, bytes.NewBuffer(deleteJSON))
+	client, req := createRequest("DELETE", api, nil)
 	req.Header.Set("Content-Type", "application/json")
 
-	// Make the request
+	// Make the DELETE request
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatalf("error making team DELETE request: %v", err)
@@ -143,8 +124,9 @@ func DeleteTeam(teamID string, teamName string, tournamentID string) {
 		log.Fatalf("Failed to delete team. Status: %v, Response: %s", resp.Status, string(body))
 	}
 
-	log.Printf("Request to delete team ID %d returned status: %v", teamIDInt, resp.Status)
+	log.Printf("Request to delete team ID %s returned status: %v", teamID, resp.Status)
 }
+
 
 func GetTeamNameByID(teams []TeamInfo, teamID string) string {
 	teamIDInt, err := strconv.Atoi(teamID)
