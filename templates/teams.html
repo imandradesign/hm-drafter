@@ -38,7 +38,7 @@
 
         <div id="team-deletion-section">
             <h2>Remove Teams</h2>
-            <form id="teamRemovalForm" method="DELETE" action="/remove-team">
+            <form id="teamRemovalForm" method="POST" action="/remove-team">
                 <label for="teamID">Enter Team ID:</label>
                 <input type="text" id="teamID" name="teamID" placeholder="Team ID" required>
                 <button type="submit">Delete Team</button>
