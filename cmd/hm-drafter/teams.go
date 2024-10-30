@@ -84,16 +84,8 @@ func AddNewTeam(teamName string, tournamentID string) {
 
 	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
 
-	// Use createRequest to include the session cookie
 	client, req := createRequest("POST", api, bytes.NewBuffer(teamJSON))
 	req.Header.Set("Content-Type", "application/json")
-
-	for name, values := range req.Header {
-		for _, value := range values {
-			log.Printf("Header: %s = %s", name, value)
-		}
-	}
-	log.Printf("Request Cookies: %v", req.Cookies())
 
 	// Make the POST request
 	resp, err := client.Do(req)
@@ -109,4 +101,42 @@ func AddNewTeam(teamName string, tournamentID string) {
 	}
 
 	log.Printf("Request to add team returned status: %v", resp.Status)
+}
+
+
+func DeleteTeam(teamID string, tournamentID string) {
+	// Convert tournament ID to an integer
+	teamIDInt, err := strconv.Atoi(teamID)
+	if err != nil {
+		log.Print("Unable to convert tournament ID string to int in AddTeam() func.")
+	}
+
+	// Create a struct to represent the payload
+	deletePayload := map[string]int{"id": teamIDInt}
+
+	// Convert the payload to JSON
+	deleteJSON, err := json.Marshal(deletePayload)
+	if err != nil {
+		log.Fatalf("error marshalling team delete data: %v", err)
+	}
+
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/team/?tournament_id=%v&format=json", tournamentID)
+
+	client, req := createRequest("DELETE", api, bytes.NewBuffer(deleteJSON))
+	req.Header.Set("Content-Type", "application/json")
+
+	// Make the DELETE request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("error making team DELETE request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check the response status code
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
+		body, _ := io.ReadAll(resp.Body)
+		log.Fatalf("Failed to delete team. Status: %v, Response: %s", resp.Status, string(body))
+	}
+
+	log.Printf("Request to delete team ID %d returned status: %v", teamIDInt, resp.Status)
 }

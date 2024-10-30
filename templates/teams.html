@@ -24,7 +24,7 @@
                 <ol id="team-ol">
                     {{range .teams}}
                     <li>
-                        {{.Name}}
+                        {{.Name}} (ID: {{.ID}})
                         <ul>
                             {{range .Players}}
                             <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
@@ -34,6 +34,15 @@
                     {{end}}
                 </ol>
             </div>
+        </div>
+
+        <div id="team-deletion-section">
+            <h2>Remove Teams</h2>
+            <form id="teamRemovalForm" method="DELETE" action="/remove-team">
+                <label for="teamID">Enter Team ID:</label>
+                <input type="text" id="teamID" name="teamID" placeholder="Team ID" required>
+                <button type="submit">Delete Team</button>
+            </form>
         </div>
 
         <div class="selected-tournament-box">
