@@ -15,10 +15,10 @@
             <div class="box existing-teams">
                 <h2>Existing Teams</h2>
                 {{range .teams}}
-                <div>{{.Name}} ({{index .FormFields "altname"}})</div>
+                <div>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</div>
                 <ul>
                     {{range .Players}}
-                    <li>{{.Name}} ({{index .FormFields "altname"}})</li>
+                    <li>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</li>
                     {{end}}
                 </ul>
                 {{end}}
@@ -28,7 +28,7 @@
                 <h2>Snake Draft Order</h2>
                 <ol>
                     {{range .draftOrder}}
-                    <li>{{.Name}} ({{index .FormFields "altname"}})</li>
+                    <li>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</li>
                     {{end}}
                 </ol>
             </div>
@@ -49,7 +49,7 @@
                 <div class="radio-btn">
                     <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer" value="{{.Name}}">
                 </div>
-                <h3>{{.Name}}</h3>
+                <h3>{{.Name}}{{if .FormFields.altname}} ({{.FormFields.altname}}){{end}}</h3>
                 <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
                 <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
                 <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
