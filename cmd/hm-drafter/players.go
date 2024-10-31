@@ -9,7 +9,7 @@ import (
 
 type Players struct {
 	Name       string            `json:"name"`
-	ID         float64           `json:"user"`
+	ID         float64           `json:"id"`
 	Scene      string            `json:"scene"`
 	Pronouns   string            `json:"pronouns"`
 	Team       int               `json:"team"`
@@ -23,7 +23,7 @@ type PlayersApiResponse struct {
 
 func ParsePlayers(data map[string]interface{}) Players {
 	player := Players{
-		ID:         data["user"].(float64),
+		ID:         data["id"].(float64),
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
 		Pronouns:   safeString(data["pronouns"]),

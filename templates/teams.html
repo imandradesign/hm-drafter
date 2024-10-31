@@ -11,7 +11,7 @@
 <body>
     <div class="header-container">
         <div id="team-creation-section">
-            <h1>Add Teams</h1>
+            <h2>Add Teams</h2>
             <form class="form" method="POST" action="/add-team">
                 <label for="teamAddition">Enter Team Name:</label>
                 <input type="text" id="teamNameSelectAdd" name="teamAddition" placeholder="Team Name" required>
@@ -24,7 +24,7 @@
                 <ol id="team-ol">
                     {{range .teams}}
                     <li>
-                        {{.Name}} (ID: {{.ID}})
+                        {{.Name}}
                         <ul>
                             {{range .Players}}
                             <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
@@ -40,20 +40,14 @@
             <h2>Selected Tournament</h2>
             <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
             <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
-            <br>
-            <p><strong>Captain Count: </strong>{{.captainCount}}</p>
-            <p><strong>Remaining Player Count: </strong>{{.remaininPlayerCount}}</p>
-            <p><strong>Captain Names:</strong></p>
-            <ul>
-                {{range .draftOrder}}
-                <li>{{.Name}}</li>
-                {{end}}
-            </ul>
+            <hr>
+            <p><strong>Captains # </strong>{{.captainCount}}</p>
+            <p><strong>Remaining Players # </strong>{{.remaininPlayerCount}}</p>
         </div>
     </div>
 
     <div id="team-deletion-section">
-        <h1>Remove Teams</h1>
+        <h2>Remove Teams</h2>
         <form class="form" method="POST" action="/remove-team">
             <label for="teamDeletion">Select a team:</label>
             <select id="teamNameSelectDelete" name="teamDeletion" required>
