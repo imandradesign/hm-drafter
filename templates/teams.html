@@ -25,14 +25,15 @@
                     {{range .teams}}
                     <li>
                         {{.Name}}
-                        <form method="POST" action="/assign-captain" style="display: inline;">
+                        <!-- <form method="POST" action="/assign-captain" style="display: inline;">
                             <select id="captainSelect" name="captainID" required>
+                                <option value="">Select a Captain</option>
                                 {{range .captains}}
                                 <option value="{{.ID}}">{{.Name}}</option>
                                 {{end}}
                             </select>
                             <button type="submit" class="confirm-btn">Add To Team</button>
-                        </form>
+                        </form> -->
                         
                         <ul>
                             {{range .Players}}
