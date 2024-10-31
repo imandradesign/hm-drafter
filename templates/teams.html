@@ -27,7 +27,6 @@
                         {{.Name}}
                         <form method="POST" action="/assign-captain" style="display: inline;">
                             <select id="captainSelect" name="captainID" required>
-                                <option value="">Select a Captain</option>
                                 {{range .captains}}
                                 <option value="{{.ID}}">{{.Name}}</option>
                                 {{end}}
