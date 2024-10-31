@@ -71,7 +71,7 @@ body {
 }
 
 .confirm-btn {
-    background-color: #F6F0F0;
+    background-color: #C9A5A5;
     font-size: 20px;
     border: none;
     padding: 10px 20px;
@@ -82,7 +82,12 @@ body {
 }
 
 .confirm-btn:hover {
-    background-color: #F1E7E7;
+    background-color: #DDC5C5;
+}
+
+.form {
+    font-size: 20px;
+    background-color: #C9A5A5;
 }
 
 .radio-btn,

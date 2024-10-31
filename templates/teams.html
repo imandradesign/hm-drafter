@@ -11,8 +11,8 @@
 <body>
     <div class="header-container">
         <div id="team-creation-section">
-            <h2>Add Teams</h2>
-            <form id="teamForm" method="POST" action="/add-team">
+            <h1>Add Teams</h1>
+            <form class="form" method="POST" action="/add-team">
                 <label for="teamName">Enter Team Name:</label>
                 <input type="text" id="teamName" name="teamName" placeholder="Team Name" required>
                 <button type="submit" class="confirm-btn">Add Team</button>
@@ -53,8 +53,8 @@
     </div>
 
     <div id="team-deletion-section">
-        <h2>Remove Teams</h2>
-        <form id="teamRemovalForm" method="POST" action="/remove-team">
+        <h1>Remove Teams</h1>
+        <form class="form" method="POST" action="/remove-team">
             <label for="teams">Select a team:</label>
             <select id="teams" name="teamID" required>
                 {{range .teams}}

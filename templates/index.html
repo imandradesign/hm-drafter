@@ -12,7 +12,7 @@
     <div class="header-container">
         <div class="tournament-select">
             <h1>Select a Portland Tournament</h1>
-            <form method="POST" action="/confirm">
+            <form class="form" method="POST" action="/confirm">
                 <label for="tournament">Choose a tournament:</label>
                 <select id="tournament" name="tournament">
                     {{range $index, $tournament := .tournaments}}
