@@ -161,7 +161,7 @@ func main() {
 
 	// Handle the form submission for adding new teams
 	router.POST("/add-team", func(c *gin.Context) {
-		teamName := c.PostForm("teamName")
+		teamName := c.PostForm("teamAddition")
 
 		AddNewTeam(teamName, tournamentID)
 
@@ -170,7 +170,7 @@ func main() {
 
 	// Handle the form submission for deleting teams
 	router.POST("/remove-team", func(c *gin.Context) {
-		teamID := c.PostForm("teamID")
+		teamID := c.PostForm("teamDeletion")
 		log.Printf("Team ID for removal: %v", teamID)
 
 		teamName := GetTeamNameByID(teams, teamID)

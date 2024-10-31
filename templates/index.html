@@ -14,7 +14,7 @@
             <h1>Select a Portland Tournament</h1>
             <form class="form" method="POST" action="/confirm">
                 <label for="tournament">Choose a tournament:</label>
-                <select id="tournament" name="tournament">
+                <select id="tournamentSelect" name="tournament">
                     {{range $index, $tournament := .tournaments}}
                     <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
                     {{else}}

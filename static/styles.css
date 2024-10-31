@@ -85,11 +85,6 @@ body {
     background-color: #DDC5C5;
 }
 
-.form {
-    font-size: 20px;
-    background-color: #C9A5A5;
-}
-
 .radio-btn,
 .checkbox-btn {
     position: absolute;
@@ -102,6 +97,12 @@ input[type="checkbox"] {
     cursor: pointer;
     height: 40px;
     width: 40px;
+}
+
+.teamNameSelect,
+#tournamentSelect {
+    font-size: 20px;
+    background-color: #C9A5A5;
 }
 
 #team-message {
