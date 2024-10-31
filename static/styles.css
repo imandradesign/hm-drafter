@@ -99,10 +99,9 @@ input[type="checkbox"] {
     width: 40px;
 }
 
-.teamNameSelect,
-#tournamentSelect {
+#tournamentSelect, #teamNameSelectAdd, #teamNameSelectDelete {
     font-size: 20px;
-    background-color: #EDE1E1;
+    background-color: #DDC5C5;
 }
 
 #team-message {

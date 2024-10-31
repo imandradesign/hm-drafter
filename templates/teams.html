@@ -14,7 +14,7 @@
             <h1>Add Teams</h1>
             <form class="form" method="POST" action="/add-team">
                 <label for="teamAddition">Enter Team Name:</label>
-                <input type="text" class="teamNameSelect" name="teamAddition" placeholder="Team Name" required>
+                <input type="text" id="teamNameSelectAdd" name="teamAddition" placeholder="Team Name" required>
                 <button type="submit" class="confirm-btn">Add Team</button>
             </form>
             <div id="teamMessage"></div>
@@ -56,7 +56,7 @@
         <h1>Remove Teams</h1>
         <form class="form" method="POST" action="/remove-team">
             <label for="teamDeletion">Select a team:</label>
-            <select class="teamNameSelect" name="teamDeletion" required>
+            <select id="teamNameSelectDelete" name="teamDeletion" required>
                 {{range .teams}}
                 <option value="{{.ID}}">{{.Name}}</option>
                 {{else}}
