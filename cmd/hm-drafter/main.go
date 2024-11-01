@@ -34,6 +34,7 @@ var (
 	currentCaptainIndex int
 	draftDirection      int
 	teams               []TeamInfo
+	unassignedCaptains  []CaptainDraft
 )
 
 // Helper function to create an HTTP request with the API key
@@ -148,12 +149,14 @@ func main() {
 	// Teams page route
 	router.GET("/teams", func(c *gin.Context) {
 		teams = GetTeams(tournamentID, players)
+		unassignedCaptains = draftOrder
 
 		c.HTML(http.StatusOK, "teams.html", gin.H{
 			"selectedTournament":  selectedTournament,
 			"remaininPlayerCount": remaininPlayerCount,
 			"playerCount":         playerCount,
 			"captainCount":        captainCount,
+			"unassignedCaptains":  unassignedCaptains,
 			"draftOrder":          draftOrder,
 			"teams":               teams,
 		})
@@ -177,6 +180,16 @@ func main() {
 		log.Printf("Team name for removal: %v", teamName)
 
 		DeleteTeam(teamID, teamName, tournamentID)
+
+		c.Redirect(http.StatusFound, "/teams")
+	})
+
+	router.POST("/assign-captain",func(c *gin.Context){
+		cap := c.PostForm("captainID")
+		team := c.PostForm("teamID")
+
+		AssignPlayerToTeam(cap, team, tournamentID)
+		unassignedCaptains = updateUnassignedCaptainList(cap, unassignedCaptains)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})

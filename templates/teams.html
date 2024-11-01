@@ -20,8 +20,9 @@
 
             <!-- Form to assign captain to a team -->
             <form id="assign-captain-form" method="POST" action="/assign-captain">
-                <h4>Assign {{index .draftOrder 0}} To A Team:</h4>
-                <input type="hidden" name="captainID" value="{{index .draftOrder 0}}">
+                {{range .unassignedCaptains}}
+                <h4>Assign {{.Name}} To A Team:</h4>
+                <input type="hidden" name="captainID" value="{{.ID}}">
                 <!-- Radio buttons for each team -->
                 <div id="team-options">
                     {{range .teams}}
@@ -38,6 +39,7 @@
                     {{end}}
                 </div>
                 <button type="submit" class="confirm-btn">Assign Captain to Team</button>
+                {{end}}
             </form>
         </div>
 

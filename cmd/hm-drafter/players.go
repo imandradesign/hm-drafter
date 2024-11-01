@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -12,6 +16,7 @@ type Players struct {
 	ID         float64           `json:"id"`
 	Scene      string            `json:"scene"`
 	Pronouns   string            `json:"pronouns"`
+	Tournament int               `json:"tournament"`
 	Team       int               `json:"team"`
 	Image      string            `json:"image"`
 	FormFields map[string]string `json:"form_fields,omitempty"`
@@ -109,4 +114,44 @@ func GetPlayersData(tournamentID string) (players []Players) {
 
 	log.Printf("API data fetched.\nPLAYERS:\n%v", players)
 	return players
+}
+
+
+func AssignPlayerToTeam(playerID string, teamID string, tournamentID string) {
+	// Convert team IDs to int
+	teamIDInt, err := strconv.Atoi(teamID)
+	if err != nil {
+		log.Print("Unable to convert team ID string to int in AssignCaptainToTeam() func.")
+	}
+
+	// Use a map to specify only the field to update
+	updateData := map[string]interface{}{
+		"team": teamIDInt,
+	}
+
+	// Convert the team struct to JSON
+	playerJSON, err := json.Marshal(updateData)
+	if err != nil {
+		log.Fatalf("error marshalling player data: %v", err)
+	}
+
+	api := fmt.Sprintf("https://kqhivemind.com/api/tournament/player/%v/?tournament_id=%v&format=json", playerID, tournamentID)
+
+	client, req := createRequest("PATCH", api, bytes.NewBuffer(playerJSON))
+	req.Header.Set("Content-Type", "application/json")
+
+	// Make the POST request
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalf("error making PATCH request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Check for success (200 OK or 204 No Content)
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
+		body, _ := io.ReadAll(resp.Body)
+		log.Fatalf("Failed to modify player's team. Status: %v, Response: %s", resp.Status, string(body))
+	} else {
+		log.Printf("Successfully assigned player %v to team %v", playerID, teamID)
+	}
 }

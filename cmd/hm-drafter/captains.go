@@ -1,12 +1,15 @@
 package main
 
 import (
+	"log"
 	"math/rand"
 	"sort"
+	"strconv"
 	"time"
 )
 
 type CaptainDraft struct {
+	ID int
 	Name  string
 	AltName string
 	Order int
@@ -30,6 +33,7 @@ func RemoveCaptainsFromPlayers(players []Players, captains []string) (draftPlaye
 
 	return draftPlayers
 }
+
 
 func CaptainDraftOrder(captains []string) (draftOrder []CaptainDraft) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -59,4 +63,22 @@ func CaptainDraftOrder(captains []string) (draftOrder []CaptainDraft) {
 	})
 
 	return draftOrder
+}
+
+
+func updateUnassignedCaptainList(captainID string, captains []CaptainDraft) (unassignedCaptains []CaptainDraft) {
+	// Convert captainID from string to integer
+	id, err := strconv.Atoi(captainID)
+	if err != nil {
+		log.Printf("Invalid captain ID: %v", captainID)
+		return captains // return the original list if there's an error
+	}
+
+	// Filter out the captain with the matching ID
+	for _, captain := range captains {
+		if captain.ID != id {
+			unassignedCaptains = append(unassignedCaptains, captain)
+		}
+	}
+	return unassignedCaptains
 }
