@@ -19,15 +19,39 @@
             </form>
         </div>
 
-        
+        <!-- Loop for each unassigned captain to assign them to a team -->
+        {{range .unassignedCaptains}}
+        <div>
+            <form id="assign-captain-form-{{.ID}}" method="POST" action="/assign-captain">
+                <h4>Assign {{.Name}} to a Team:</h4>
+                <input type="hidden" name="captainID" value="{{.ID}}">
+                <div id="team-options">
+                    {{range $.teams}}
+                    <label>
+                        <input type="radio" name="teamID" value="{{.ID}}" required>
+                        {{.Name}}
+                    </label>
+                    <ul>
+                        {{range .Players}}
+                        <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}
+                        </li>
+                        {{end}}
+                    </ul>
+                    <br>
+                    {{end}}
+                </div>
+                <button type="submit" class="confirm-btn">Assign Captain to Team</button>
+            </form>
+        </div>
+        {{end}}
 
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
-            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
-            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+            <p><strong>Name:</strong> {{index .selectedTournament 1}}</p>
+            <p><strong>Date:</strong> {{index .selectedTournament 2}}</p>
             <hr>
-            <p><strong>Captains # </strong>{{.captainCount}}</p>
-            <p><strong>Remaining Players # </strong>{{.remaininPlayerCount}}</p>
+            <p><strong>Captains #</strong> {{.captainCount}}</p>
+            <p><strong>Remaining Players #</strong> {{.remaininPlayerCount}}</p>
         </div>
     </div>
 
@@ -51,7 +75,6 @@
         <center>
             <h3>Ready to Start the Draft?</h3>
             <br>
-            <!-- Button calls JavaScript function to confirm before redirecting -->
             <button type="button" class="confirm-btn" onclick="confirmDoneAddingTeams()">Done Adding Teams</button>
         </center>
     </div>
