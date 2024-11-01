@@ -19,7 +19,6 @@
             </form>
         </div>
 
-        <!-- Loop for each unassigned captain to assign them to a team -->
         {{range .unassignedCaptains}}
         <div>
             <form id="assign-captain-form-{{.ID}}" method="POST" action="/assign-captain">
