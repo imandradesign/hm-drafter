@@ -17,31 +17,9 @@
                 <input type="text" id="teamNameSelectAdd" name="teamAddition" placeholder="Team Name" required>
                 <button type="submit" class="confirm-btn">Add Team</button>
             </form>
-
-            <!-- Form to assign captain to a team -->
-            <form id="assign-captain-form" method="POST" action="/assign-captain">
-                {{range .unassignedCaptains}}
-                <h4>Assign {{.Name}} To A Team:</h4>
-                <input type="hidden" name="captainID" value="{{.ID}}">
-                <!-- Radio buttons for each team -->
-                <div id="team-options">
-                    {{range .teams}}
-                    <label>
-                        <input type="radio" name="teamID" value="{{.ID}}" required>
-                        {{.Name}}
-                    </label>
-                    <ul>
-                        {{range .Players}}
-                        <li>{{.Name}} ({{index .FormFields "altname"}})</li>
-                        {{end}}
-                    </ul>
-                    <br>
-                    {{end}}
-                </div>
-                <button type="submit" class="confirm-btn">Assign Captain to Team</button>
-                {{end}}
-            </form>
         </div>
+
+        
 
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
