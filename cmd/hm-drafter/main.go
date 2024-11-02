@@ -151,6 +151,8 @@ func main() {
 		teams = GetTeams(tournamentID, players)
 		unassignedCaptains = draftOrder
 
+		log.Printf("Unassigned Captain Data:\n%v", unassignedCaptains)
+
 		c.HTML(http.StatusOK, "teams.html", gin.H{
 			"selectedTournament":  selectedTournament,
 			"remaininPlayerCount": remaininPlayerCount,
