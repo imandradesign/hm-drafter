@@ -188,6 +188,8 @@ func main() {
 		cap := c.PostForm("captainID")
 		team := c.PostForm("teamID")
 
+		log.Printf("Captain ID: %v\nTeam ID: %v", cap, team)
+
 		AssignPlayerToTeam(cap, team, tournamentID)
 		unassignedCaptains = updateUnassignedCaptainList(cap, unassignedCaptains)
 
