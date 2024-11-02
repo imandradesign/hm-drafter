@@ -19,6 +19,16 @@
             </form>
         </div>
 
+        <div>
+            <h3>Captains List</h3>
+            {{range .draftOrder}}
+            <ul>
+                <li>{{.Name}}
+                </li>
+            </ul>
+            {{end}}
+        </div>
+
         <div class="selected-tournament-box">
             <h2>Selected Tournament</h2>
             <p><strong>Name:</strong> {{index .selectedTournament 1}}</p>
