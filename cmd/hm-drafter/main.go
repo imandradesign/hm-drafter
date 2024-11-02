@@ -196,6 +196,12 @@ func main() {
 
 	// Redirect to Drafting page after confirming teams
 	router.POST("/confirm-teams",func(c *gin.Context) {
+		// If no teams exist, return an error message
+		if len(teams) == 0 {
+			c.String(http.StatusBadRequest, "No teams created. Please create at least one team.")
+			return
+		}
+
 		c.Redirect(http.StatusFound, "/drafting")
 	})
 

@@ -24,7 +24,7 @@ func GetPDXTournies() (portlandTournies [][]string) {
 	listLen := len(portlandTournies)
 	page := 1
 
-	for listLen < 10 {
+	for listLen < 20 {
 		// Construct API URL with the tournament slug and page number
 		api := fmt.Sprintf(apiTemplate, "tournament", fmt.Sprintf("&page=%d", page), "")
 		

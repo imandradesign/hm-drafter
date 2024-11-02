@@ -28,12 +28,12 @@
             <p><strong>Remaining Players #</strong> {{.remaininPlayerCount}}</p>
         </div>
     </div>
+    <hr>
 
-    {{range .unassignedCaptains}}
     <div>
-        <form id="assign-captain-form-{{.ID}}" method="POST" action="/assign-captain">
-            <h4>Assign {{.Name}} to a Team:</h4>
-            <input type="hidden" name="captainID" value="{{.ID}}">
+        <form id="assign-captain-form" method="POST" action="/assign-captain">
+            <h4>Assign {{(index .unassignedCaptains 0).Name}} to a Team:</h4>
+            <input type="hidden" name="captainID" value="{{(index .unassignedCaptains 0).ID}}">
             <div id="team-options">
                 {{range $.teams}}
                 <label>
@@ -47,7 +47,6 @@
                     {{end}}
                 </ul>
                 <br>
-                {{end}}
             </div>
             <button type="submit" class="confirm-btn">Assign Captain to Team</button>
         </form>
