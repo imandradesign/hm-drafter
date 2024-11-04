@@ -146,13 +146,14 @@ func main() {
 		currentCaptainIndex = 0 // Start with the first captain
 		draftDirection = 1      // Start with ascending order
 
+		unassignedCaptains = draftOrder
+
 		c.Redirect(http.StatusFound, "/teams")
 	})
 
 	// Teams page route
 	router.GET("/teams", func(c *gin.Context) {
 		teams = GetTeams(tournamentID, players)
-		unassignedCaptains = draftOrder
 
 		log.Printf("Unassigned Captain Data:\n%v", unassignedCaptains)
 
@@ -196,7 +197,7 @@ func main() {
 		log.Printf("Captain ID: %v\nTeam ID: %v", cap, team)
 
 		AssignPlayerToTeam(cap, team, tournamentID)
-		unassignedCaptains = updateUnassignedCaptainList(cap, unassignedCaptains)
+		unassignedCaptains = UpdateUnassignedCaptainList(cap, unassignedCaptains)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})

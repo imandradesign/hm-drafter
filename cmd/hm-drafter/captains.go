@@ -90,7 +90,7 @@ func CaptainDraftOrder(captains []CaptainDraft) (draftOrder []CaptainDraft) {
 }
 
 
-func updateUnassignedCaptainList(captainID string, captains []CaptainDraft) (unassignedCaptains []CaptainDraft) {
+func UpdateUnassignedCaptainList(captainID string, captains []CaptainDraft) (unassignedCaptains []CaptainDraft) {
 	// Convert captainID from string to float64
 	id, err := strconv.ParseFloat(captainID, 64)
 	if err != nil {
