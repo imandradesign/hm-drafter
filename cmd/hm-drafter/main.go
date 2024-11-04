@@ -21,21 +21,21 @@ const (
 )
 
 var (
-	selectedTournament  []string
-	formFields          [][]string
-	tournamentID        string
-	players             []Players
-	playerCount         int
-	captains            []CaptainDraft
-	captainsFromForm    []string
-	captainCount        int
-	draftPlayers        []Players
-	draftOrder          []CaptainDraft
+	selectedTournament   []string
+	formFields           [][]string
+	tournamentID         string
+	players              []Players
+	playerCount          int
+	captains             []CaptainDraft
+	captainNamesFromForm []string
+	captainCount         int
+	draftPlayers         []Players
+	draftOrder           []CaptainDraft
 	remaininPlayerCount int
-	currentCaptainIndex int
-	draftDirection      int
-	teams               []TeamInfo
-	unassignedCaptains  []CaptainDraft
+	currentCaptainIndex  int
+	draftDirection       int
+	teams                []TeamInfo
+	unassignedCaptains   []CaptainDraft
 )
 
 // Helper function to create an HTTP request with the API key
@@ -126,8 +126,8 @@ func main() {
 	// Handle the form submission for captain selection
 	router.POST("/confirm-captains", func(c *gin.Context) {
 		// Get the selected captains from the form
-		captainsFromForm = c.PostFormArray("selectedPlayers")
-		captains := GetCaptainInfoFromID(captainsFromForm, players)
+		captainNamesFromForm = c.PostFormArray("selectedPlayers")
+		captains := GetCaptainInfoFromNames(captainNamesFromForm, players)
 		captainCount = len(captains)
 
 

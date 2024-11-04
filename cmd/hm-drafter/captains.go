@@ -35,29 +35,21 @@ func RemoveCaptainsFromPlayers(players []Players, captains []CaptainDraft) (draf
 }
 
 
-func GetCaptainInfoFromID(captainIDList []string, players []Players) (captains []CaptainDraft) {
-	// Convert captainIDList from strings to float64
-	var captainIDs []float64
-	for _, idStr := range captainIDList {
-		id, err := strconv.ParseFloat(idStr, 64)
-		if err != nil {
-			log.Printf("Error converting captain ID %s to float64: %v", idStr, err)
-			continue // Skip invalid IDs
-		}
-		captainIDs = append(captainIDs, id)
+func GetCaptainInfoFromNames(captainNamesList []string, players []Players) (captains []CaptainDraft) {
+	// Create a map for quick lookup of captain names
+	captainNames := make(map[string]bool)
+	for _, name := range captainNamesList {
+		captainNames[name] = true
 	}
 
-	// Iterate through players to find matches for captain IDs
+	// Iterate through players to find matches for captain names
 	for _, player := range players {
-		for _, captainID := range captainIDs {
-			if player.ID == captainID {
-				captains = append(captains, CaptainDraft{
-					ID:      player.ID,
-					Name:    player.Name,
-					AltName: player.FormFields["altname"],
-				})
-				break
-			}
+		if captainNames[player.Name] {
+			captains = append(captains, CaptainDraft{
+				ID:      player.ID,
+				Name:    player.Name,
+				AltName: player.FormFields["altname"],
+			})
 		}
 	}
 
