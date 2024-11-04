@@ -26,7 +26,8 @@ var (
 	tournamentID        string
 	players             []Players
 	playerCount         int
-	captains            []string
+	captains            []CaptainDraft
+	captainsFromForm    []string
 	captainCount        int
 	draftPlayers        []Players
 	draftOrder          []CaptainDraft
@@ -125,8 +126,10 @@ func main() {
 	// Handle the form submission for captain selection
 	router.POST("/confirm-captains", func(c *gin.Context) {
 		// Get the selected captains from the form
-		captains = c.PostFormArray("selectedPlayers")
+		captainsFromForm = c.PostFormArray("selectedPlayers")
+		captains := GetCaptainInfoFromID(captainsFromForm, players)
 		captainCount = len(captains)
+
 
 		// If no captains were selected, return an error message
 		if len(captains) == 0 {

@@ -47,8 +47,7 @@
                 {{range $index, $player := .players}}
                 <label class="player-card" for="playerCheckbox{{$index}}">
                     <div class="checkbox-btn">
-                        <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}"
-                            onclick="event.stopPropagation();">
+                        <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.ID}}" onclick="event.stopPropagation();">
                     </div>
                     <h2>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</h2>
                     <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index
