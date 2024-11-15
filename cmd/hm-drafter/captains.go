@@ -91,7 +91,7 @@ func GenerateDraftOrder(captains []Captain) (draftOrder []Captain) {
 
 
 // Adds or removes players from the unassignedCaptains var. If addCap bool is True, player list is searched and the one with the matching captain ID is appended. IF addCap is False, captain is removed from list.
-func UpdateUnassignedCaptainList(captainID string, captains []Captain, addCap bool) (unassignedCaptains []Captain) {
+func UpdateUnassignedCaptains(captainID string, captains []Captain, addCap bool) (unassignedCaptains []Captain) {
 	// Convert captainID from string to float64
 	id, err := strconv.ParseFloat(captainID, 64)
 	if err != nil {

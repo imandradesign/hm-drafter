@@ -204,7 +204,7 @@ func main() {
 		log.Printf("Captain ID: %v\nTeam ID: %v", cap, team)
 
 		AssignPlayerToTeam(cap, team, tournamentID)
-		unassignedCaptains = UpdateUnassignedCaptainList(cap, unassignedCaptains, false)
+		unassignedCaptains = UpdateUnassignedCaptains(cap, unassignedCaptains, false)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})
