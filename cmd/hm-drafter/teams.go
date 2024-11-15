@@ -19,14 +19,14 @@ type Team struct {
 type TeamInfo struct {
 	ID      int
 	Name    string
-	Players []Players `json:"players,omitempty"`
+	Players []Player `json:"players,omitempty"`
 }
 
 type TeamApiResponse struct {
 	Results []Team `json:"results"`
 }
 
-func GetTeams(tournamentID string, players []Players) (teams []TeamInfo) {
+func GetTeams(tournamentID string, players []Player) (teams []TeamInfo) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 
 	// Fetch Teams from the API
@@ -46,7 +46,7 @@ func GetTeams(tournamentID string, players []Players) (teams []TeamInfo) {
 	// Create a map of team IDs to TeamInfo pointers for quick access
 	teamMap := make(map[int]*TeamInfo)
 	for _, team := range teamApiResponse.Results {
-		teamInfo := TeamInfo{ID: team.ID, Name: team.Name, Players: []Players{}}
+		teamInfo := TeamInfo{ID: team.ID, Name: team.Name, Players: []Player{}}
 		teams = append(teams, teamInfo)
 		teamMap[team.ID] = &teams[len(teams)-1] // Map each TeamInfo by its ID
 	}

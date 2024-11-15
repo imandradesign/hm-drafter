@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-type Players struct {
+type Player struct {
 	Name       string            `json:"name"`
 	ID         float64           `json:"id"`
 	Scene      string            `json:"scene"`
@@ -26,8 +26,8 @@ type PlayersApiResponse struct {
 	Results []map[string]interface{} `json:"results"`
 }
 
-func ParsePlayers(data map[string]interface{}) Players {
-	player := Players{
+func ParsePlayers(data map[string]interface{}) Player {
+	player := Player{
 		ID:         data["id"].(float64),
 		Name:       safeString(data["name"]),
 		Scene:      safeString(data["scene"]),
@@ -75,7 +75,7 @@ func safeString(value interface{}) string {
 }
 
 // GetPlayersData retrieves all player data for the specified tournament ID, returning a slice of Players
-func GetPlayersData(tournamentID string) (players []Players) {
+func GetPlayersData(tournamentID string) (players []Player) {
 	log.Println("Fetching player data...")
 
 	page := 1

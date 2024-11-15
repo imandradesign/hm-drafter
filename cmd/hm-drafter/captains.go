@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type CaptainDraft struct {
+type Captain struct {
 	ID float64
 	Name  string
 	AltName string
@@ -16,7 +16,7 @@ type CaptainDraft struct {
 }
 
 // RemoveCaptainsFromPlayers returns a new player list without captains
-func RemoveCaptainsFromPlayers(players []Players, captains []CaptainDraft) (draftPlayers []Players) {
+func RemoveCaptainsFromPlayers(players []Player, captains []Captain) (draftPlayers []Player) {
 	captainSet := make(map[string]bool)
 	
 	// Create a set of captain names for quick lookups
@@ -35,7 +35,7 @@ func RemoveCaptainsFromPlayers(players []Players, captains []CaptainDraft) (draf
 }
 
 
-func GetCaptainInfoFromNames(captainNamesList []string, players []Players) (captains []CaptainDraft) {
+func ExtractCaptains(captainNamesList []string, players []Player) (captains []Captain) {
 	// Create a map for quick lookup of captain names
 	captainNames := make(map[string]bool)
 	for _, name := range captainNamesList {
@@ -45,7 +45,7 @@ func GetCaptainInfoFromNames(captainNamesList []string, players []Players) (capt
 	// Iterate through players to find matches for captain names
 	for _, player := range players {
 		if captainNames[player.Name] {
-			captains = append(captains, CaptainDraft{
+			captains = append(captains, Captain{
 				ID:      player.ID,
 				Name:    player.Name,
 				AltName: player.FormFields["altname"],
@@ -57,7 +57,7 @@ func GetCaptainInfoFromNames(captainNamesList []string, players []Players) (capt
 }
 
 
-func CaptainDraftOrder(captains []CaptainDraft) (draftOrder []CaptainDraft) {
+func GenerateDraftOrder(captains []Captain) (draftOrder []Captain) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	// Create a slice of numbers from 1 to the number of captains
@@ -73,7 +73,7 @@ func CaptainDraftOrder(captains []CaptainDraft) (draftOrder []CaptainDraft) {
 
 	// Pair each captain with a draft position and add to draftOrder
 	for i, captain := range captains {
-		draftOrder = append(draftOrder, CaptainDraft{
+		draftOrder = append(draftOrder, Captain{
 			ID:      captain.ID,
 			Name:    captain.Name,
 			AltName: captain.AltName,
@@ -90,7 +90,8 @@ func CaptainDraftOrder(captains []CaptainDraft) (draftOrder []CaptainDraft) {
 }
 
 
-func UpdateUnassignedCaptainList(captainID string, captains []CaptainDraft) (unassignedCaptains []CaptainDraft) {
+// Adds or removes players from the unassignedCaptains var. If addCap bool is True, player list is searched and the one with the matching captain ID is appended. IF addCap is False, captain is removed from list.
+func UpdateUnassignedCaptainList(captainID string, captains []Captain, addCap bool) (unassignedCaptains []Captain) {
 	// Convert captainID from string to float64
 	id, err := strconv.ParseFloat(captainID, 64)
 	if err != nil {

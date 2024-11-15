@@ -24,21 +24,29 @@ var (
 	selectedTournament   []string
 	formFields           [][]string
 	tournamentID         string
-	players              []Players
+	players              []Player
 	playerCount          int
-	captains             []CaptainDraft
+	captains             []Captain
 	captainNamesFromForm []string
 	captainCount         int
-	draftPlayers         []Players
-	draftOrder           []CaptainDraft
-	remaininPlayerCount int
+	playersOnDeletedTeam []string
+	draftPlayers         []Player
+	draftOrder           []Captain
+	remainingPlayerCount int
 	currentCaptainIndex  int
 	draftDirection       int
 	teams                []TeamInfo
-	unassignedCaptains   []CaptainDraft
+	unassignedCaptains   []Captain
 )
 
 // Helper function to create an HTTP request with the API key
+// Parameters:
+// - method: HTTP method (e.g., "GET", "POST").
+// - url: The URL for the request.
+// - body: The request body, can be nil for methods like GET.
+// Returns:
+// - client: An HTTP client with a timeout.
+// - req: The created HTTP request with the Authorization header set.
 func createRequest(method, url string, body io.Reader) (client *http.Client, req *http.Request) {
 	client = &http.Client{
 		Timeout: 10 * time.Second,
@@ -69,8 +77,7 @@ func main() {
 		port = "8000" // Default
 	}
 
-	router := gin.New()
-	router.Use(gin.Logger())
+	router := gin.Default()
 
 	// Load HTML templates
 	router.LoadHTMLFiles("templates/index.html", "templates/drafting.html", "templates/teams.html", "templates/done.html")
@@ -127,7 +134,7 @@ func main() {
 	router.POST("/confirm-captains", func(c *gin.Context) {
 		// Get the selected captains from the form
 		captainNamesFromForm = c.PostFormArray("selectedPlayers")
-		captains := GetCaptainInfoFromNames(captainNamesFromForm, players)
+		captains := ExtractCaptains(captainNamesFromForm, players)
 		captainCount = len(captains)
 
 
@@ -139,10 +146,10 @@ func main() {
 
 		// Save initial draft info
 		draftPlayers = RemoveCaptainsFromPlayers(players, captains)
-		remaininPlayerCount = len(draftPlayers)
+		remainingPlayerCount = len(draftPlayers)
 
 		// Set initial values for the draft state
-		draftOrder = CaptainDraftOrder(captains)
+		draftOrder = GenerateDraftOrder(captains)
 		currentCaptainIndex = 0 // Start with the first captain
 		draftDirection = 1      // Start with ascending order
 
@@ -159,7 +166,7 @@ func main() {
 
 		c.HTML(http.StatusOK, "teams.html", gin.H{
 			"selectedTournament":  selectedTournament,
-			"remaininPlayerCount": remaininPlayerCount,
+			"remainingPlayerCount": remainingPlayerCount,
 			"playerCount":         playerCount,
 			"captainCount":        captainCount,
 			"unassignedCaptains":  unassignedCaptains,
@@ -185,19 +192,19 @@ func main() {
 		teamName := GetTeamNameByID(teams, teamID)
 		log.Printf("Team name for removal: %v", teamName)
 
-		DeleteTeam(teamID, teamName, tournamentID)
+		playersOnDeletedTeam = DeleteTeam(teamID, teamName, tournamentID)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})
 
-	router.POST("/assign-captain",func(c *gin.Context){
+	router.POST("/assign-captain",func(c *gin.Context) {
 		cap := c.PostForm("captainID")
 		team := c.PostForm("teamID")
 
 		log.Printf("Captain ID: %v\nTeam ID: %v", cap, team)
 
 		AssignPlayerToTeam(cap, team, tournamentID)
-		unassignedCaptains = UpdateUnassignedCaptainList(cap, unassignedCaptains)
+		unassignedCaptains = UpdateUnassignedCaptainList(cap, unassignedCaptains, false)
 
 		c.Redirect(http.StatusFound, "/teams")
 	})
@@ -221,7 +228,7 @@ func main() {
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
 			"captainCount": captainCount,
-			"remaininPlayerCount": remaininPlayerCount,
+			"remainingPlayerCount": remainingPlayerCount,
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
 			"currentCaptain": currCaptain,
@@ -254,7 +261,7 @@ func main() {
 		c.HTML(http.StatusOK, "drafting.html", gin.H{
 			"selectedTournament": selectedTournament,
 			"captainCount": captainCount,
-			"remaininPlayerCount": remaininPlayerCount,
+			"remainingPlayerCount": remainingPlayerCount,
 			"draftOrder": draftOrder,
 			"draftPlayers": draftPlayers,
 			"currentCaptain": currCaptain,
@@ -272,6 +279,6 @@ func main() {
 
 	err := router.Run(":" + port)
 	if err != nil {
-		log.Fatal("Failed to start the server:", err)
+		log.Fatalf("Failed to start the server: %v", err)
 	}
 }

@@ -9,7 +9,7 @@ type UpdatePlayerTeamRequest struct {
     Team int `json:"team"`
 }
 
-func advanceDraftTurn(draftOrder []CaptainDraft) {
+func advanceDraftTurn(draftOrder []Captain) {
 	// Move to the next captain
 	currentCaptainIndex += draftDirection
 
@@ -23,7 +23,7 @@ func advanceDraftTurn(draftOrder []CaptainDraft) {
 	}
 }
 
-func RemoveDraftedPlayers(draftPlayers []Players, selectedPlayer string) (updatedDraftPlayers []Players) {
+func RemoveDraftedPlayers(draftPlayers []Player, selectedPlayer string) (updatedDraftPlayers []Player) {
 	for _, player := range draftPlayers {
 		if player.Name != selectedPlayer {
 			updatedDraftPlayers = append(updatedDraftPlayers, player)
