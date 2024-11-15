@@ -216,7 +216,7 @@ func main() {
 			c.String(http.StatusBadRequest, "No teams created. Please create at least one team.")
 			return
 		}
-
+		
 		// Update teams with the latest data
 		teams = GetTeams(tournamentID, players)
 
