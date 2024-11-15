@@ -99,10 +99,27 @@ func UpdateUnassignedCaptainList(captainID string, captains []Captain, addCap bo
 		return captains // return the original list if there's an error
 	}
 
-	// Filter out the captain with the matching ID
-	for _, captain := range captains {
-		if captain.ID != id {
-			unassignedCaptains = append(unassignedCaptains, captain)
+	// Search the full players list for the one with the same ID as the captain we're adding to the unassignedCaptains list
+	if addCap == true {
+		for _, player := range players {
+			if id == player.ID {
+				unassignedCaptains = append(unassignedCaptains, Captain{
+					ID:      player.ID,
+					Name:    player.Name,
+					AltName: player.FormFields["altname"],
+				})
+				break // Only add one matching player
+			}
+		}
+	}
+
+	// Add all captains except the one recently assigned to a team back to the unassignedCaptains list.
+	if addCap == false {
+		// Filter out the captain with the matching ID
+		for _, captain := range captains {
+			if captain.ID != id {
+				unassignedCaptains = append(unassignedCaptains, captain)
+			}
 		}
 	}
 	return unassignedCaptains
