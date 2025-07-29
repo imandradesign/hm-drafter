@@ -6,17 +6,6 @@ import (
 	"log"
 )
 
-type Tournament struct {
-	ID        int    `json:"id"`
-	Name      string `json:"name"`
-	Date      string `json:"date"`
-	SceneName string `json:"scene_name"`
-}
-
-type TourneyAPIResponse struct {
-	Results []Tournament `json:"results"`
-}
-
 // GetPDXTournies takes the API string that lists all tournaments, checks the `results` list for entries where the `scene_name` is `kqpdx` and returns those events with their ID, name, and date in nested lists
 func GetPDXTournies() (portlandTournies [][]string) {
 	log.Println("Fetching tournament data...")

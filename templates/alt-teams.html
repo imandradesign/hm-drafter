@@ -20,7 +20,7 @@
         </div>
 
         <div>
-            <h3>Queen List</h3>
+            <h3>Captains List</h3>
             {{range .draftOrder}}
             <ul>
                 <li>{{.Name}}
@@ -34,7 +34,7 @@
             <p><strong>Name:</strong> {{index .selectedTournament 1}}</p>
             <p><strong>Date:</strong> {{index .selectedTournament 2}}</p>
             <hr>
-            <p><strong>Queen #</strong> {{.captainCount}}</p>
+            <p><strong>Captains #</strong> {{.captainCount}}</p>
             <p><strong>Remaining Players #</strong> {{.remainingPlayerCount}}</p>
         </div>
     </div>
@@ -42,7 +42,7 @@
 
     <div>
         {{if gt (len .unassignedCaptains) 0}}
-        <form id="assign-queen-form" method="POST" action="/assign-captain">
+        <form id="assign-captain-form" method="POST" action="/assign-captain">
             <h4>Assign {{(index .unassignedCaptains 0).Name}} to a Team:</h4>
             <input type="hidden" name="captainID" value="{{(index .unassignedCaptains 0).ID}}">
             <div id="team-options">

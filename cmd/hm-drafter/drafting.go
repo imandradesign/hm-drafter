@@ -5,10 +5,6 @@ import (
 	"log"
 )
 
-type UpdatePlayerTeamRequest struct {
-    Team int `json:"team"`
-}
-
 func advanceDraftTurn(draftOrder []Captain) {
 	// Move to the next captain
 	currentCaptainIndex += draftDirection

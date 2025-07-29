@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-type Captain struct {
-	ID float64
-	Name  string
-	AltName string
-	Order int
-}
-
 // RemoveCaptainsFromPlayers returns a new player list without captains
 func RemoveCaptainsFromPlayers(players []Player, captains []Captain) (draftPlayers []Player) {
 	captainSet := make(map[string]bool)

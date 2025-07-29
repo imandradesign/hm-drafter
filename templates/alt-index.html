@@ -4,22 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portland Mixer Drafting - Queen Selections</title>
+    <title>Portland Mixer Drafting - Tournament Select</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body>
     <div class="header-container">
-        <div class="teams">
-            <h1>Teams</h1>
-            {{range .teams}}
-            <div>{{.Name}}</div>
-            <ul>
-                {{range .Players}}
-                <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
-                {{end}}
-            </ul>
-            {{end}}
+        <div class="tournament-select">
+            <h1>Select a Portland Tournament</h1>
+            <form class="form" method="POST" action="/confirm">
+                <label for="tournament">Choose a tournament:</label>
+                <select id="tournamentSelect" name="tournament">
+                    {{range $index, $tournament := .tournaments}}
+                    <option value="{{$index}}">{{index $tournament 1}} [Date: {{index $tournament 2}}]</option>
+                    {{else}}
+                    <option>No tournaments available</option>
+                    {{end}}
+                </select>
+                <br><br>
+                <button type="submit" class="confirm-btn">Confirm</button>
+            </form>
+        </div>
 
         {{if .selectedTournament}}
         <div class="selected-tournament-box">
@@ -36,7 +41,7 @@
 
     <div id="players-section" style="display: block;">
         {{if .players}}
-        <h2>Select Your Queens</h2>
+        <h2>Select Your Captains</h2>
         <form id="captainsForm" method="POST" action="/confirm-captains" onsubmit="return confirmCaptainsSelection()">
             <div class="players-grid">
                 {{range $index, $player := .players}}
@@ -45,6 +50,10 @@
                         <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}" onclick="event.stopPropagation();">
                     </div>
                     <h2>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</h2>
+                    <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index
+                                .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
+                                "captain"}}</span></strong></h3>
+                    <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
                     <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
                     <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
                     <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
@@ -53,7 +62,7 @@
                 {{end}}
             </div>
             <br><br>
-            <center><button type="submit" class="confirm-btn">Confirm Captains</button></center>
+            <center><button type="submit" class="confirm-btn">Confirm Queens</button></center>
         </form>
         {{end}}
     </div>
@@ -73,11 +82,11 @@
             });
 
             if (captains.length === 0) {
-                alert('No captains selected. Please select at least one captain.');
+                alert('No queens selected. Please select at least one queen.');
                 return false;
             }
 
-            const confirmationMessage = `Are you sure? Your captains are:\n\n${captains.join('\n')}`;
+            const confirmationMessage = `Are you sure? Your queens are:\n\n${captains.join('\n')}`;
             const isConfirmed = confirm(confirmationMessage);
 
             if (isConfirmed) {

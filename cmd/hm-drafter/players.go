@@ -11,21 +11,6 @@ import (
 	"strings"
 )
 
-type Player struct {
-	Name       string            `json:"name"`
-	ID         float64           `json:"id"`
-	Scene      string            `json:"scene"`
-	Pronouns   string            `json:"pronouns"`
-	Tournament int               `json:"tournament"`
-	Team       int               `json:"team"`
-	Image      string            `json:"image"`
-	FormFields map[string]string `json:"form_fields,omitempty"`
-}
-
-type PlayersApiResponse struct {
-	Results []map[string]interface{} `json:"results"`
-}
-
 func ParsePlayers(data map[string]interface{}) Player {
 	player := Player{
 		ID:         data["id"].(float64),

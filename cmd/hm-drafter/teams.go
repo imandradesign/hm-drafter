@@ -10,22 +10,6 @@ import (
 	"strconv"
 )
 
-type Team struct {
-	ID         int    `json:"id"`
-	Name       string `json:"name"`
-	Tournament int    `json:"tournament"`
-}
-
-type TeamInfo struct {
-	ID      int
-	Name    string
-	Players []Player `json:"players,omitempty"`
-}
-
-type TeamApiResponse struct {
-	Results []Team `json:"results"`
-}
-
 func GetTeams(tournamentID string, players []Player) (teams []TeamInfo) {
 	log.Printf("Starting GetTeams Func. Tournament ID passed in: %v", tournamentID)
 

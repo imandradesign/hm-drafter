@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portland Mixer Drafting - Registration</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="header-container">
+        <div class="new-player-form">
+        <h1>Registration</h1>
+            <form class="form" method="POST" action="/add-player">
+                <label for="playerName">First Name & Last Initial:</label>
+                <input type="text" id="playerName" name="name" required>
+                <br><br>
+                <label for="playerSkill">Skill Self Assess (1=new, 5=very experienced): </label>
+                <input type="number" id="playerSkill" name="skill" min="1" max="5" required>
+                <br><br>
+                <label for="playerRoles">Preferred Roles: </label>
+                <select id="playerRoles" name="roles" multiple required>
+                    <option value="Queen">Queen</option>
+                    <option value="Speed Warrior">Speed Warrior</option>
+                    <option value="Vanilla Warrior">Vanilla Warrior</option>
+                    <option value="Objective Runner">Objective Runner</option>
+                </select>
+                <br><br>
+                <label for="playerFlexible">[Flexible Attendance] Toggle if you'll show up to fill out teams, but you're also willing to drop out for even team #s:  </label>
+                <input type="checkbox" id="playerFlexible" name="flexible">
+                <br><br>
+                <label for="playerSub">[Sub] Would you be willing to sub on other teams if needed (in addition to playing with your own team)?: </label>
+                <input type="checkbox" id="playerSub" name="sub">
+                <br><br>
+                <label for="playerCoach">[Coach / 6th Player] Would you be willing to be the 6th player on a team that coaches new players and/or subs for some games on your team?: </label>
+                <input type="checkbox" id="playerCoach" name="coach">
+                <br><br>
+                <button type="submit" class="confirm-btn">Submit Registration</button>
+            </form>
+        </div>
+
+        {{if .selectedTournament}}
+        <div class="selected-tournament-box">
+            <h2>Selected Tournament</h2>
+            <p>
+                <center><strong>Player Count: </strong>{{.playerCount}}</center>
+            </p>
+            <p><strong>ID: </strong>{{index .selectedTournament 0}}</p>
+            <p><strong>Name: </strong>{{index .selectedTournament 1}}</p>
+            <p><strong>Date: </strong>{{index .selectedTournament 2}}</p>
+            {{end}}
+        </div>
+    </div>
+</body>
+
+</html>

@@ -6,16 +6,6 @@ import (
 	"log"
 )
 
-type FormFields struct {
-	FieldName        string    `json:"field_name"`
-	FieldSlug      string `json:"field_slug"`
-	FieldDescription      string `json:"field_description"`
-}
-
-type FormApiResponse struct {
-	Results []FormFields `json:"results"`
-}
-
 // GetFormFields takes the API string that lists all tourney form fields, checks the `results` list entries and returns the form fields with their randomly assigned name
 func GetFormFields(tournamentId string) (fields [][]string) {
 	log.Println("Fetching form field data...")

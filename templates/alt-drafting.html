@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portland Mixer Drafting</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="header-container">
+        <!-- Top row with equal-width boxes -->
+        <div class="top-row">
+            <div class="box existing-teams">
+                <h2>Existing Teams</h2>
+                {{range .teams}}
+                <div>{{.Name}}</div>
+                <ul>
+                    {{range .Players}}
+                    <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
+                    {{end}}
+                </ul>
+                {{end}}
+            </div>
+
+            <div class="box snake-draft">
+                <h2>Snake Draft Order</h2>
+                <ol>
+                    {{range .draftOrder}}
+                    <li>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</li>
+                    {{end}}
+                </ol>
+            </div>
+        </div>
+
+        <!-- Second row: Current captain info -->
+        <div id="curr-captain">
+            <h1><strong>Your Turn: {{.currentCaptain}}</strong></h1>
+        </div>
+    </div>
+
+    <!-- Third row: Player selection -->
+    <h2>Players List</h2>
+    <form method="POST" action="/pick-player">
+        <div class="players-grid">
+            {{range $index, $player := .draftPlayers}}
+            <label class="player-card" onclick="toggleRadio('playerRadio{{$index}}')">
+                <div class="radio-btn">
+                    <input type="radio" id="playerRadio{{$index}}" name="selectedPlayer" value="{{.Name}}">
+                </div>
+                <h3>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</h3>
+                <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
+                <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
+                <p><strong>Skill Level:</strong> {{index .FormFields "skill"}}</p>
+            </label>
+            {{end}}
+        </div>
+        <button type="submit" class="confirm-btn">Claim Player</button>
+    </form>
+
+    <script>
+        function toggleRadio(radioId) {
+            var radio = document.getElementById(radioId);
+            radio.checked = true;
+        }
+    </script>
+</body>
+
+</html>

@@ -16,7 +16,7 @@
                 <label for="tournament">Choose a tournament:</label>
                 <select id="tournamentSelect" name="tournament">
                     {{range $index, $tournament := .tournaments}}
-                    <option value="{{$index}}">Name: {{index $tournament 1}}, Date: {{index $tournament 2}}</option>
+                    <option value="{{$index}}">{{index $tournament 1}} [Date: {{index $tournament 2}}]</option>
                     {{else}}
                     <option>No tournaments available</option>
                     {{end}}
@@ -41,7 +41,7 @@
 
     <div id="players-section" style="display: block;">
         {{if .players}}
-        <h2>Select Your Captains</h2>
+        <h2>Select Your Queens</h2>
         <form id="captainsForm" method="POST" action="/confirm-captains" onsubmit="return confirmCaptainsSelection()">
             <div class="players-grid">
                 {{range $index, $player := .players}}
@@ -50,10 +50,6 @@
                         <input type="checkbox" id="playerCheckbox{{$index}}" name="selectedPlayers" value="{{.Name}}" onclick="event.stopPropagation();">
                     </div>
                     <h2>{{.Name}}{{if ne (index .FormFields "altname") ""}} ({{index .FormFields "altname"}}){{end}}</h2>
-                    <h3><strong>Captain?: <span class="{{if or (eq (index .FormFields "captain") "Yes" ) (eq (index
-                                .FormFields "captain" ) "If needed" )}}captain-text{{end}}">{{index .FormFields
-                                "captain"}}</span></strong></h3>
-                    <p><strong>Discord Handle:</strong> {{index .FormFields "discord"}}</p>
                     <p><strong>Pronouns:</strong> {{.Pronouns}}</p>
                     <p><strong>Flexible Attendence?:</strong> {{index .FormFields "flexible"}}</p>
                     <p><strong>Roles:</strong> {{index .FormFields "roles"}}</p>
